@@ -2,24 +2,28 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-03-27 21:17:23
- * @LastEditTime: 2019-03-27 22:49:08
+ * @LastEditTime: 2019-03-28 22:31:58
  */
-export default function ({ $axios, redirect }) {
+export default function (ctx) {
+   
+
+    const { $axios, redirect } = ctx;
+
     $axios.onRequest(config => {
-        console.log('Making request to ', config)
+       
     });
 
 
     $axios.onResponse(response => {
-        console.log('Making response to ', response)
+       
     });
 
     $axios.onRequestError(err => {
-        console.log(err);
+     
     });
 
     $axios.onResponseError(err => {
-        console.log(err);
+       
     });
 
 

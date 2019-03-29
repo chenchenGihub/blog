@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-03-26 21:09:13
- * @LastEditTime: 2019-03-27 00:08:44
+ * @LastEditTime: 2019-03-28 22:32:17
  -->
  <template>
   <div class="text-xs-center">
@@ -38,7 +38,7 @@ export default {
   },
   methods: {
     input(event) {
-      console.log(event);
+     
     },
     next() {
     

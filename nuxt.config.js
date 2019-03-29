@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-03-10 01:08:09
- * @LastEditTime: 2019-03-27 22:37:46
+ * @LastEditTime: 2019-03-28 22:32:07
  */
 const pkg = require('./package')
 
@@ -79,7 +79,7 @@ module.exports = {
     ** You can extend webpack config here
     */
     extend(config, ctx) {
-      // console.log(config);
+     
       
     }
   }

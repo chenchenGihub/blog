@@ -2,7 +2,7 @@
  * @Description: 布局
  * @Author: chenchen
  * @Date: 2019-03-10 01:08:09
- * @LastEditTime: 2019-03-27 20:27:17
+ * @LastEditTime: 2019-03-28 22:32:13
  -->
 <template>
   <v-app dark>
@@ -494,7 +494,7 @@ export default {
     },
     async login() {
       const ip = await this.$axios.$get("http://icanhazip.com");
-      console.log(ip);
+     
     }
   },
   methods: {

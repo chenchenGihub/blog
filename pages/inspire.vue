@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-03-20 08:52:56
- * @LastEditTime: 2019-03-27 19:42:05
+ * @LastEditTime: 2019-03-28 22:31:46
  -->
 <template>
 
@@ -100,6 +100,15 @@ export default {
   data() {
     return {
       articleList: [
+       
+      ]
+    };
+  },
+  methods: {},
+  async asyncData({ $axios }) {
+    const ip = await $axios.$get("http://icanhazip.com");
+    return {
+      articleList: [
         {
           userName: "嗔恨",
           title: "分享webpack升级之路",
@@ -108,10 +117,10 @@ export default {
       ]
     };
   },
-  methods: {},
-  async asyncData({ $axios }) {
-    const ip = await $axios.$get('http://icanhazip.com');
-    console.log(ip);
+  async fetch({ store }) {
+    await store.commit("user/add", 111);
+
+   
   }
 };
 </script>
