@@ -530,7 +530,7 @@ export default {
   justify-content: flex-start;
   align-items: flex-start;
   height: 100%;
-  width: 100%;
+  width: 80%;
 }
 
 .aside {
