@@ -536,6 +536,7 @@ export default {
 .aside {
   width: 30%;
   min-width: 110px;
+  max-width: 400px;
   height: 100%;
   background: #eee;
 }
