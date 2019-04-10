@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-03-20 08:52:56
- * @LastEditTime: 2019-03-28 22:31:46
+ * @LastEditTime: 2019-04-10 15:25:00
  -->
 <template>
 
@@ -118,8 +118,11 @@ export default {
     };
   },
   async fetch({ store }) {
-    await store.commit("user/add", 111);
+   
+    
+    await store.dispatch("article/getArticle", 111);
 
+    
    
   }
 };

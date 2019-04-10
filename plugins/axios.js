@@ -1,16 +1,18 @@
 /*
- * @Description: file content
+ * @Description: 集中配置http请求
  * @Author: chenchen
  * @Date: 2019-03-27 21:17:23
- * @LastEditTime: 2019-03-28 22:31:58
+ * @LastEditTime: 2019-04-10 15:44:57
  */
+const querystring  = require('querystring')
+
 export default function (ctx) {
    
 
     const { $axios, redirect } = ctx;
 
     $axios.onRequest(config => {
-       
+       console.log("拦截器",config);
     });
 
 
@@ -34,4 +36,6 @@ export default function (ctx) {
             redirect('/400')
         }
     })
+
+  
 }
