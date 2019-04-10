@@ -1,0 +1,30 @@
+exports.USER_SCHEMA = {
+    userNameType:{
+        type:String,
+        trim:true,
+        require:true,
+        minlength:[6,"账号长度必须大于等于6位"],
+        maxlength:[10,"账号长度必须小于等于10位"]
+    },
+    avatarUrlType:{
+        type:String,
+        trim:true,
+        default:'https://cdn.vuetifyjs.com/images/lists/1.jpg'
+    },
+    passwordType:{
+        type:String,
+        trim:true,
+        require:true,
+        minlength:[6,"密码长度必须大于等于6位"],
+        maxlength:[18,"密码长度必须小于等于18位"]
+    },
+    tokenType:{
+        type:String
+    },
+    deviceType:{
+        type:String
+    },
+    ipType:{
+        type:String
+    }
+}

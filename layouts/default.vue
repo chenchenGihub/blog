@@ -113,7 +113,7 @@
                                       <v-layout column>
                                         <v-flex xs12 md4>
                                           <v-text-field
-                                            v-model="registerForm.account"
+                                            v-model="registerForm.userName"
                                             :rules="nameRules"
                                             :counter="10"
                                             label="账号"
@@ -282,9 +282,11 @@ export default {
       isRpValid: false,
       isReValid: false,
       registerForm: {
-        account: "",
+        userName: "",
         email: "",
-        password: ""
+        password: "",
+        device:"",
+        ip:""
       },
       loginForm: {
         userName: "",
@@ -381,6 +383,27 @@ export default {
         this.registerForm
       );
     }
+  },
+  created(){
+    let ua = window.navigator.userAgent.toLocaleLowerCase().split(" ")
+
+    let platform = '';
+
+    if (window.navigator.userAgent.platform==='Win32') {
+      platform = 'windows'
+    }else{
+      platform = "其他"
+    }
+
+    let brower = '' ;
+
+    if (ua.findIndex(e=>e.includes("chrome"))>0) {
+      brower = ua[ua.findIndex(e=>e.includes("chrome"))]
+    }else if(ua.findIndex(e=>e.includes("firefox"))>0){
+      brower = ua[ua.findIndex(e=>e.includes("firefox"))]
+    }
+
+
   }
 };
 </script>

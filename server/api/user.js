@@ -3,10 +3,18 @@ const { Router } = require('express');
 
 const router = Router()
 
-router.get('/register',(req,res,next)=>{
+const UserModel = require('../db/model/user')
 
-    console.log(req);
+router.put('/register',(req,res,next)=>{
+
+    console.log(req.body);
+
+    // let {  }
     
+    let User = new UserModel({
+        userName:req.body
+    })
+
     
     res.json({
         success:true
