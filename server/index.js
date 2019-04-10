@@ -1,5 +1,6 @@
 const express = require('express')
 const consola = require('consola')
+const mongoose = require('mongoose')
 const {
   Nuxt,
   Builder
@@ -11,9 +12,25 @@ const bodyParser = require('body-parser')
 let config = require('../nuxt.config.js')
 config.dev = !(process.env.NODE_ENV === 'production')
 
+const DBURL = require('./config')
+
 const api = require('./api')
 
 async function start() {
+
+  mongoose.connect(DBURL)
+
+  const con = mongoose.connection
+
+  con.on("error",console.error.bind(console,"数据库连接失败"))
+
+  con.once("open",()=>{
+    consola.ready({
+      message: `数据库连接成功`,
+      badge: true
+    })
+  })
+
   // Init Nuxt.js
   const nuxt = new Nuxt(config)
 

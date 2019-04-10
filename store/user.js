@@ -2,14 +2,14 @@
  * @Description: 状态管理
  * @Author: chenchen
  * @Date: 2019-03-28 19:55:16
- * @LastEditTime: 2019-04-10 15:22:33
+ * @LastEditTime: 2019-04-10 17:30:17
  */
 export const state = () => ({
   list: []
 })
 
 export const mutations = {
-  add(state, text) {
+  register(state, text) {
     state.list.push({
       text: text,
       done: false
@@ -26,9 +26,17 @@ export const mutations = {
 }
 
 export const actions = {
-  add({
+ async register({
     commit
   }, params) {
-    commit('add', params)
+
+    console.log(params);
+    
+
+    const data = await this.$axios.$put('/api/register',params);
+
+    commit('register', params);
+
   }
+  
 }

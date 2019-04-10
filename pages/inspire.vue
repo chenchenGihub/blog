@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-03-20 08:52:56
- * @LastEditTime: 2019-04-10 15:25:00
+ * @LastEditTime: 2019-04-10 17:24:33
  -->
 <template>
 
@@ -104,7 +104,9 @@ export default {
       ]
     };
   },
-  methods: {},
+  methods: {
+    
+  },
   async asyncData({ $axios }) {
     const ip = await $axios.$get("http://icanhazip.com");
     return {

@@ -2,28 +2,16 @@
  * @Description: 布局
  * @Author: chenchen
  * @Date: 2019-03-10 01:08:09
- * @LastEditTime: 2019-03-28 22:32:13
+ * @LastEditTime: 2019-04-10 17:24:24
  -->
 <template>
   <v-app dark>
-    <v-navigation-drawer
-      v-model="drawer"
-      :mini-variant="miniVariant"
-      :clipped="clipped"
-      fixed
-      app
-    >
-      <v-list
-        v-for="(item,i) in items"
-        :key="i"
-      >
-        <v-expansion-panel
-          v-if="item.children.length>0"
-          focusable
-        >
+    <v-navigation-drawer v-model="drawer" :mini-variant="miniVariant" :clipped="clipped" fixed app>
+      <v-list v-for="(item,i) in items" :key="i">
+        <v-expansion-panel v-if="item.children.length>0" focusable>
           <v-expansion-panel-content
             exact
-            :value='item.children.length'
+            :value="item.children.length"
             :hide-actions="item.children.length===0||miniVariant"
           >
             <template v-slot:header>
@@ -31,91 +19,53 @@
                 <div class="v-list__tile__action">
                   <v-icon>{{ item.icon }}</v-icon>
                 </div>
-                <span
-                  v-if="!miniVariant"
-                  class="title-text"
-                >{{item.title}}</span>
+                <span v-if="!miniVariant" class="title-text">{{item.title}}</span>
               </div>
             </template>
             <v-list v-if="item.children.length">
-              <v-list-tile
-                v-for="(it, i) in item.children"
-                :key="i"
-                :to="it.to"
-                router
-                exact
-              >
+              <v-list-tile v-for="(it, i) in item.children" :key="i" :to="it.to" router exact>
                 <v-list-tile-action>
                   <v-icon>{{ it.icon }}</v-icon>
                 </v-list-tile-action>
                 <v-list-tile-content>
-                  <v-list-tile-title v-text="it.title" />
+                  <v-list-tile-title v-text="it.title"/>
                 </v-list-tile-content>
               </v-list-tile>
             </v-list>
           </v-expansion-panel-content>
         </v-expansion-panel>
 
-        <v-list-tile
-          v-else
-          :to="item.to"
-          router
-          exact
-        >
+        <v-list-tile v-else :to="item.to" router exact>
           <v-list-tile-action>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title v-text="item.title" />
+            <v-list-tile-title v-text="item.title"/>
           </v-list-tile-content>
         </v-list-tile>
-
       </v-list>
     </v-navigation-drawer>
-    <v-toolbar
-      :clipped-left="clipped"
-      fixed
-      app
-    >
-      <v-toolbar-side-icon @click="drawer = !drawer" />
-      <v-btn
-        icon
-        @click.stop="miniVariant = !miniVariant"
-      >
+    <v-toolbar :clipped-left="clipped" fixed app>
+      <v-toolbar-side-icon @click="drawer = !drawer"/>
+      <v-btn icon @click.stop="miniVariant = !miniVariant">
         <v-icon>{{ `chevron_${miniVariant ? 'right' : 'left'}` }}</v-icon>
       </v-btn>
-      <v-btn
-        icon
-        @click.stop="clipped = !clipped"
-      >
+      <v-btn icon @click.stop="clipped = !clipped">
         <v-icon>web</v-icon>
       </v-btn>
-      <v-btn
-        icon
-        @click.stop="fixed = !fixed"
-      >
-      </v-btn>
-      <v-toolbar-title v-text="title" />
+      <v-btn icon @click.stop="fixed = !fixed"></v-btn>
+      <v-toolbar-title v-text="title"/>
       <em>-------人海茫茫,后会无期</em>
-      <v-spacer />
-      <v-btn
-        icon
-        @click.stop="rightDrawer = !rightDrawer"
-      >
+      <v-spacer/>
+      <v-btn icon @click.stop="rightDrawer = !rightDrawer">
         <v-icon>menu</v-icon>
       </v-btn>
     </v-toolbar>
     <v-content>
       <v-container class="m-ctn">
         <aside class="aside">
-          <v-container
-            fluid
-            grid-list-lg
-          >
-            <v-layout
-              row
-              wrap
-            >
+          <v-container fluid grid-list-lg>
+            <v-layout row wrap>
               <v-flex xs12>
                 <v-card>
                   <v-card-title>
@@ -147,37 +97,21 @@
                             ></v-combobox>
                           </v-flex>
                           <v-flex xs12>
-
                             <!-- 注册 -->
 
-                            <v-dialog
-                              v-model="dialog"
-                              width="500"
-                            >
+                            <v-dialog v-model="dialog" width="500">
                               <template v-slot:activator="{ on }">
-                                <a
-                                  v-on="on"
-                                  to="/register"
-                                >注册</a>
-
+                                <a v-on="on" to="/register">注册</a>
                               </template>
 
                               <v-card>
-                                <v-card-text
-                                  class="headline grey lighten-2"
-                                  primary-title
-                                >
-                                  注册账号
-                                </v-card-text>
+                                <v-card-text class="headline grey lighten-2" primary-title>注册账号</v-card-text>
 
                                 <v-card-text>
                                   <v-form v-model="valid">
                                     <v-container>
                                       <v-layout column>
-                                        <v-flex
-                                          xs12
-                                          md4
-                                        >
+                                        <v-flex xs12 md4>
                                           <v-text-field
                                             v-model="registerForm.account"
                                             :rules="nameRules"
@@ -187,23 +121,16 @@
                                           ></v-text-field>
                                         </v-flex>
 
-                                        <v-flex
-                                          xs12
-                                          md4
-                                        >
+                                        <v-flex xs12 md4>
                                           <v-text-field
                                             v-model="registerForm.email"
                                             :rules="emailRules"
                                             label="邮箱"
                                             required
                                           ></v-text-field>
-
                                         </v-flex>
 
-                                        <v-flex
-                                          xs12
-                                          md4
-                                        >
+                                        <v-flex xs12 md4>
                                           <v-text-field
                                             v-model="registerForm.password"
                                             :rules="passwordRules"
@@ -221,32 +148,20 @@
 
                                 <v-card-actions>
                                   <v-spacer></v-spacer>
-                                  <v-layout
-                                    align-center
-                                    center
-                                  >
-                                    <v-btn
-                                      color="error"
-                                      @click="dialog = false"
-                                    >取消</v-btn>
+                                  <v-layout align-center center>
+                                    <v-btn color="error" @click="dialog = false">取消</v-btn>
                                     <v-btn
                                       color="primary"
-                                      @click="dialog = false"
+                                      @click="register"
                                       :disabled="!isRaValid || !isReValid || !isRpValid"
-                                    >
-                                      确定
-                                    </v-btn>
+                                    >确定</v-btn>
                                   </v-layout>
                                 </v-card-actions>
                               </v-card>
                             </v-dialog>
                             <!--  注册 -->
-
                           </v-flex>
-                          <v-flex
-                            text-xs-center
-                            xs12
-                          >
+                          <v-flex text-xs-center xs12>
                             <v-btn
                               color="info"
                               :disabled="!loginForm.password||!loginForm.userName"
@@ -259,43 +174,21 @@
                 </v-card>
               </v-flex>
               <!--标题-->
-              <v-flex
-                align-center
-                xs12
-              >
+              <v-flex align-center xs12>
                 <v-card light>
-                  <v-card-text>
-                    最近评论
-                  </v-card-text>
+                  <v-card-text>最近评论</v-card-text>
                 </v-card>
               </v-flex>
 
               <!-- 评论内容 -->
 
               <v-flex xs12>
-                <v-card
-                  color="cyan darken-2"
-                  class="white--text"
-                >
+                <v-card color="cyan darken-2" class="white--text">
                   <v-list two-line>
                     <template v-for="(item, index) in contents">
-                      <v-subheader
-                        v-if="item.header"
-                        :key="item.header"
-                      >
-                        {{ item.header }}
-                      </v-subheader>
-                      <v-divider
-                        v-else-if="item.divider"
-                        :key="index"
-                        :inset="item.inset"
-                      ></v-divider>
-                      <v-list-tile
-                        v-else
-                        :key="item.title"
-                        avatar
-                        @click="showDetail"
-                      >
+                      <v-subheader v-if="item.header" :key="item.header">{{ item.header }}</v-subheader>
+                      <v-divider v-else-if="item.divider" :key="index" :inset="item.inset"></v-divider>
+                      <v-list-tile v-else :key="item.title" avatar @click="showDetail">
                         <v-list-tile-avatar>
                           <img :src="item.avatar">
                         </v-list-tile-avatar>
@@ -309,38 +202,24 @@
                   </v-list>
                 </v-card>
               </v-flex>
-
             </v-layout>
           </v-container>
         </aside>
 
         <!-- 内容 -->
         <main class="content">
-          <v-container
-            grid-list-lg
-            fluid
-            text-xs-center
-          >
-            <v-layout
-              row
-              wrap
-            >
+          <v-container grid-list-lg fluid text-xs-center>
+            <v-layout row wrap>
               <v-flex xs12>
-                <nuxt />
+                <nuxt/>
               </v-flex>
             </v-layout>
           </v-container>
         </main>
         <!--内容  -->
-
       </v-container>
     </v-content>
-    <v-navigation-drawer
-      v-model="rightDrawer"
-      :right="right"
-      temporary
-      fixed
-    >
+    <v-navigation-drawer v-model="rightDrawer" :right="right" temporary fixed>
       <v-list>
         <v-list-tile @click.native="right = !right">
           <v-list-tile-action>
@@ -350,14 +229,10 @@
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
-    <v-footer
-      :fixed="fixed"
-      app
-    >
+    <v-footer :fixed="fixed" app>
       <span>&copy; 2019</span>
     </v-footer>
   </v-app>
-
 </template>
 
 <script>
@@ -420,31 +295,31 @@ export default {
       nameRules: [
         v => {
           this.isRaValid = false;
-          return !!v || "账号必填"},
+          return !!v || "账号必填";
+        },
         v => {
           if ((v && v.length <= 6) || v.length > 10) {
             this.isRaValid = false;
             return v.length > 10 ? "账号不能超过10位" : "账号必须超过6位";
-          }else{
-            return this.isRaValid = true;
-            
+          } else {
+            return (this.isRaValid = true);
           }
         }
       ],
       passwordRules: [
         v => !!v || "密码必填",
-        v =>{
-          let reg = /^(?![a-z]+$)(?![0-9]+$)[a-zA-Z0-9]{7,18}$/
-          if ((v && v.length <=6) || v.length > 18) {
+        v => {
+          let reg = /^(?![a-z]+$)(?![0-9]+$)[a-zA-Z0-9]{7,18}$/;
+          if ((v && v.length <= 6) || v.length > 18) {
             this.isRpValid = false;
-            return v.length > 18 ?'密码不能超过18位': "密码必须超过6位"
-          }else if(!reg.test(v)){
+            return v.length > 18 ? "密码不能超过18位" : "密码必须超过6位";
+          } else if (!reg.test(v)) {
             this.isRpValid = false;
-             return  "密码必须数字加字母"
-          }else{
-           return this.isRpValid = true;
+            return "密码必须数字加字母";
+          } else {
+            return (this.isRpValid = true);
           }
-        } 
+        }
       ],
       emailRules: [
         v => {
@@ -455,7 +330,7 @@ export default {
             this.isReValid = false;
             return "邮箱格式不正确";
           } else {
-           return this.isReValid = true;
+            return (this.isReValid = true);
           }
         }
       ],
@@ -494,11 +369,18 @@ export default {
     },
     async login() {
       const ip = await this.$axios.$get("http://icanhazip.com");
-     
     }
   },
   methods: {
-    showDetail() {}
+    showDetail() {},
+    async register() {
+      this.dialog = false;
+
+      const data = await this.$store.dispatch(
+        "user/register",
+        this.registerForm
+      );
+    }
   }
 };
 </script>
