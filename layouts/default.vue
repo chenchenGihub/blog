@@ -85,7 +85,6 @@
                               :rules="lnameRules"
                               label="请输入用户名"
                               clearable
-                              @change="usernameChange"
                             ></v-combobox>
                           </v-flex>
                           <v-flex xs12>
@@ -119,6 +118,7 @@
                                             :counter="10"
                                             label="账号"
                                             required
+                                            @input="usernameChange"
                                           ></v-text-field>
                                         </v-flex>
 
@@ -296,41 +296,18 @@ export default {
       },
       users: ["Programming", "Design", "Vue", "Vuetify"],
       valid: false,
-      nameRules: [
-        v => {
-          this.isRaValid = false;
-          return !!v || "账号必填";
-        },
-        async v => {
-          if ((v && v.length <= 6) || (v && v.length > 10)) {
-            this.isRaValid = false;
-            return v.length > 10 ? "账号不能超过10位" : "账号必须超过6位";
-          } else {
-            await this.$store.dispatch("user/checkname", {
-              userName: this.registerForm.userName
-            });
 
-            if (this.$store.state.user.checknameState.success) {
-              return (this.isRaValid = true);
-            } else {
-              return "用户名已存在";
-            }
-          }
-        }
-      ],
       lnameRules: [
         v => {
           this.isRaValid = false;
           return !!v || "账号必填";
         },
-         v => {
+        v => {
           if ((v && v.length <= 6) || (v && v.length > 10)) {
             this.isRaValid = false;
             return v.length > 10 ? "账号不能超过10位" : "账号必须超过6位";
           } else {
-          
-              return (this.isRaValid = true);
-          
+            return (this.isRaValid = true);
           }
         }
       ],
@@ -395,7 +372,31 @@ export default {
       this.items;
       return;
     },
-    async login() {}
+    async login() {},
+    nameRules() {
+      return [
+        v => {
+          this.isRaValid = false;
+          return !!v || "账号必填";
+        },
+        v => {
+          if ((v && v.length <= 6) || (v && v.length > 10)) {
+            this.isRaValid = false;
+            return v.length > 10 ? "账号不能超过10位" : "账号必须超过6位";
+          } else {
+            return (this.isRaValid = true);
+          }
+        },
+        // v => {
+        //   console.log(this.$store.state.user.checknameState.success);
+        //   if (this.$store.state.user.checknameState.success) {
+        //      return (this.isRaValid = true);
+        //   } else {
+        //     return "用户名已存在";
+        //   }
+        // }
+      ];
+    }
   },
   methods: {
     showDetail() {},
@@ -406,7 +407,44 @@ export default {
         this.registerForm
       );
     },
-    usernameChange(event) {}
+    async usernameChange(event) {
+      console.log(event);
+
+      if (event.trim().length >= 6 && event.trim().length < 10) {
+        await this.$store.dispatch("user/checkname", {
+          userName: event.trim()
+        });
+      }
+
+      console.log("www",this.$store.state.user.checknameState.success);
+      if (this.$store.state.user.checknameState.success===false) {
+      let ele   = document.createElement('div');
+        ele.classList = 'v-messages__message message-transition-enter-to err';
+        ele.innerText = "用户已存在";
+        ele.style = 'color:red'
+        if ( document.querySelector(".v-label")) {
+           document.querySelector(".v-label").style.cssText +="color:red!important;"
+        }
+         
+        document.querySelector('.v-messages__wrapper').appendChild(ele);
+
+        
+     
+      }else if (this.$store.state.user.checknameState.success===true) {
+        
+      if (document.querySelector('.err')) {
+        document.querySelector('.v-messages__wrapper').removeChild(document.querySelector('.err'))
+      
+         document.querySelector(".v-label").style.color="rgba(255,255,255,0.7)"
+          if (document.querySelector('.err')) {
+           document.querySelector('.err').style.color="rgba(255,255,255,0.7)"
+        }
+      }
+         
+         document.querySelector(".v-text-field").classList.remove('error--text')
+      }
+      
+    }
   },
   created() {
     let ua = window.navigator.userAgent.toLocaleLowerCase();

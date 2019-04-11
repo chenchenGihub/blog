@@ -8,7 +8,7 @@
 export const state = () => ({
   list: [],
   checknameState: {
-    success: false
+    success: null
   }
 })
 

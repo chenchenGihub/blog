@@ -12,7 +12,7 @@ export default function (ctx) {
     const { $axios, redirect } = ctx;
 
     $axios.onRequest(config => {
-       console.log("拦截器",config);
+     
     });
 
 
