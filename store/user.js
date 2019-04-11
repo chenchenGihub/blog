@@ -2,10 +2,14 @@
  * @Description: 状态管理
  * @Author: chenchen
  * @Date: 2019-03-28 19:55:16
- * @LastEditTime: 2019-04-10 17:30:17
+ * @LastEditTime: 2019-04-11 15:52:33
  */
+
 export const state = () => ({
-  list: []
+  list: [],
+  checknameState: {
+    success: false
+  }
 })
 
 export const mutations = {
@@ -15,28 +19,36 @@ export const mutations = {
       done: false
     })
   },
-  remove(state, {
-    todo
-  }) {
-    state.list.splice(state.list.indexOf(todo), 1)
-  },
-  toggle(state, todo) {
-    todo.done = !todo.done
+  checkname(state, text) {
+
+    state.checknameState.success = text.success
   }
 }
 
 export const actions = {
- async register({
+  async register({
     commit
   }, params) {
 
-    console.log(params);
-    
+    const ip = await this.$axios.$get("http://icanhazip.com");
 
-    const data = await this.$axios.$put('/api/register',params);
+    params.ip = ip;
+
+    const data = await this.$axios.$put('/api/register', params);
+
+    console.log(data);
 
     commit('register', params);
 
+  },
+  async checkname({
+    commit
+  }, q) {
+    
+    const data = await this.$axios.$get('/api/checkname',{params: q});
+
+    commit("checkname", data);
+
   }
-  
+
 }

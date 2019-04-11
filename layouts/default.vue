@@ -2,7 +2,7 @@
  * @Description: 布局
  * @Author: chenchen
  * @Date: 2019-03-10 01:08:09
- * @LastEditTime: 2019-04-10 17:24:24
+ * @LastEditTime: 2019-04-11 15:58:31
  -->
 <template>
   <v-app dark>
@@ -82,9 +82,10 @@
                               v-model="loginForm.userName"
                               chips
                               :items="users"
-                              :rules="nameRules"
+                              :rules="lnameRules"
                               label="请输入用户名"
                               clearable
+                              @change="usernameChange"
                             ></v-combobox>
                           </v-flex>
                           <v-flex xs12>
@@ -216,7 +217,7 @@
             </v-layout>
           </v-container>
         </main>
-        <!--内容  -->
+        <!-- 内容  -->
       </v-container>
     </v-content>
     <v-navigation-drawer v-model="rightDrawer" :right="right" temporary fixed>
@@ -236,6 +237,7 @@
 </template>
 
 <script>
+import { async } from "q";
 export default {
   data() {
     return {
@@ -285,8 +287,8 @@ export default {
         userName: "",
         email: "",
         password: "",
-        device:"",
-        ip:""
+        device: "",
+        ip: ""
       },
       loginForm: {
         userName: "",
@@ -299,12 +301,36 @@ export default {
           this.isRaValid = false;
           return !!v || "账号必填";
         },
-        v => {
-          if ((v && v.length <= 6) || v.length > 10) {
+        async v => {
+          if ((v && v.length <= 6) || (v && v.length > 10)) {
             this.isRaValid = false;
             return v.length > 10 ? "账号不能超过10位" : "账号必须超过6位";
           } else {
-            return (this.isRaValid = true);
+            await this.$store.dispatch("user/checkname", {
+              userName: this.registerForm.userName
+            });
+
+            if (this.$store.state.user.checknameState.success) {
+              return (this.isRaValid = true);
+            } else {
+              return "用户名已存在";
+            }
+          }
+        }
+      ],
+      lnameRules: [
+        v => {
+          this.isRaValid = false;
+          return !!v || "账号必填";
+        },
+         v => {
+          if ((v && v.length <= 6) || (v && v.length > 10)) {
+            this.isRaValid = false;
+            return v.length > 10 ? "账号不能超过10位" : "账号必须超过6位";
+          } else {
+          
+              return (this.isRaValid = true);
+          
           }
         }
       ],
@@ -312,7 +338,7 @@ export default {
         v => !!v || "密码必填",
         v => {
           let reg = /^(?![a-z]+$)(?![0-9]+$)[a-zA-Z0-9]{7,18}$/;
-          if ((v && v.length <= 6) || v.length > 18) {
+          if ((v && v.length <= 6) || (v && v.length > 18)) {
             this.isRpValid = false;
             return v.length > 18 ? "密码不能超过18位" : "密码必须超过6位";
           } else if (!reg.test(v)) {
@@ -369,41 +395,74 @@ export default {
       this.items;
       return;
     },
-    async login() {
-      const ip = await this.$axios.$get("http://icanhazip.com");
-    }
+    async login() {}
   },
   methods: {
     showDetail() {},
     async register() {
       this.dialog = false;
-
       const data = await this.$store.dispatch(
         "user/register",
         this.registerForm
       );
-    }
+    },
+    usernameChange(event) {}
   },
-  created(){
-    let ua = window.navigator.userAgent.toLocaleLowerCase().split(" ")
+  created() {
+    let ua = window.navigator.userAgent.toLocaleLowerCase();
 
-    let platform = '';
+    let uaArr = ua.split(" ");
 
-    if (window.navigator.userAgent.platform==='Win32') {
-      platform = 'windows'
-    }else{
-      platform = "其他"
+    let platform = "";
+
+    if (window.navigator.platform === "Win32") {
+      let pv = navigator.userAgent
+        .slice(
+          navigator.userAgent.indexOf("("),
+          navigator.userAgent.indexOf(")")
+        )
+        .split(" ")
+        .reverse()[1]
+        .split(";")[0];
+
+      platform = "windows" + pv;
+    } else if (window.navigator.platform === "MacIntel") {
+      let pv = navigator.userAgent
+        .slice(
+          navigator.userAgent.indexOf("("),
+          navigator.userAgent.indexOf(")")
+        )
+        .split(" ")
+        .reverse()[0];
+
+      platform = "macos" + pv;
+    } else if (ua.includes("iphone")) {
+      platform = "iPhone";
+    } else if (ua.includes("android")) {
+      platform = "android";
     }
 
-    let brower = '' ;
+    let browser = "";
 
-    if (ua.findIndex(e=>e.includes("chrome"))>0) {
-      brower = ua[ua.findIndex(e=>e.includes("chrome"))]
-    }else if(ua.findIndex(e=>e.includes("firefox"))>0){
-      brower = ua[ua.findIndex(e=>e.includes("firefox"))]
+    if (uaArr.findIndex(e => e.includes("chrome")) > 0) {
+      browser = uaArr[uaArr.findIndex(e => e.includes("chrome"))];
+    } else if (uaArr.findIndex(e => e.includes("firefox")) > 0) {
+      browser = uaArr[uaArr.findIndex(e => e.includes("firefox"))];
+    } else if (uaArr.findIndex(e => e.includes("edge")) > 0) {
+      browser = uaArr[uaArr.findIndex(e => e.includes("edge"))];
+    } else if (uaArr.findIndex(e => e.includes("opr")) > 0) {
+      browser = uaArr[uaArr.findIndex(e => e.includes("opr"))];
+    } else if (uaArr.findIndex(e => e.includes("net4")) > 0) {
+      browser = "ie" + uaArr.findIndex(e => e.includes("rv")).split(":")[1];
+    } else if (
+      !ua.includes("chrome") &&
+      !ua.includes("opr") &&
+      ua.includes("safari")
+    ) {
+      browser = uaArr[uaArr.findIndex(e => e.includes("safari"))];
     }
 
-
+    this.registerForm.device = platform + " " + browser;
   }
 };
 </script>

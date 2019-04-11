@@ -2,7 +2,7 @@
  * @Description: 主页
  * @Author: chenchen
  * @Date: 2019-03-10 01:08:09
- * @LastEditTime: 2019-04-10 15:24:14
+ * @LastEditTime: 2019-04-11 10:20:22
  -->
 <template>
   <v-layout column justify-center align-center>
@@ -34,7 +34,7 @@ export default {
     VuetifyLogo
   },
   async fetch({ store }) {
-    await store.dispatch("user/add", 111);
+    // await store.dispatch("user/add", 111);
   }
 };
 </script>

@@ -1,8 +1,12 @@
 exports.errorCode = {
-    NOT_EXSIT: 10001
+    UNKHOWN:10001,
+    USER_EXSIT: 10002,
+    NOT_EXSIT: 10002,
 }
 
 exports.errorMsg = {
-    NOT_EXSIT: "用户不存在"
+    UNKHOWN:"入参错误",
+    USER_EXSIT: "用户已存在",
+    NOT_EXSIT: "用户不存在",
 }
 

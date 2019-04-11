@@ -11,6 +11,10 @@ exports.USER_SCHEMA = {
         trim:true,
         default:'https://cdn.vuetifyjs.com/images/lists/1.jpg'
     },
+    emailType:{
+        type:String,
+        trim:true
+    },
     passwordType:{
         type:String,
         trim:true,
@@ -21,10 +25,6 @@ exports.USER_SCHEMA = {
     tokenType:{
         type:String
     },
-    deviceType:{
-        type:String
-    },
-    ipType:{
-        type:String
-    }
+    deviceType:[String],
+    ipType:[String]
 }
