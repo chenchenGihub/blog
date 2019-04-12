@@ -2,7 +2,7 @@
  * @Description: 集中配置http请求
  * @Author: chenchen
  * @Date: 2019-03-27 21:17:23
- * @LastEditTime: 2019-04-10 15:44:57
+ * @LastEditTime: 2019-04-12 15:57:57
  */
 const querystring  = require('querystring')
 
@@ -17,6 +17,11 @@ export default function (ctx) {
 
 
     $axios.onResponse(response => {
+       console.log(response);
+
+       if (response.data && response.data.success===false) {
+           alert(response.data.msg)
+       }
        
     });
 
@@ -25,6 +30,7 @@ export default function (ctx) {
     });
 
     $axios.onResponseError(err => {
+       console.log(err);
        
     });
 

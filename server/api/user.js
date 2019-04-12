@@ -4,6 +4,7 @@ const {
 
 const router = Router();
 
+// const UserModel = require('../db/model/user');
 const UserModel = require('../db/model/user');
 
 const {
@@ -29,8 +30,6 @@ router.put('/register', async (req, res, next) => {
     })
   }
 
-
-  User.avatarUrl = req.body.avatarUrl;
   User.userName = req.body.userName;
   User.email = req.body.email;
   User.password = req.body.password;
@@ -39,7 +38,7 @@ router.put('/register', async (req, res, next) => {
   User.ip.push(req.body.ip);
 
   try {
-    const data = await User.save();
+    data = await User.save();
     res.json({
       success: true,
       data: null,
@@ -72,6 +71,40 @@ router.put('/register', async (req, res, next) => {
 
 })
 
+router.put('/login', async (req, res, next) => {
+
+  const {
+    userName
+  } = req.body;
+
+  
+
+
+  const doc = await UserModel.findOne({
+    userName: userName
+  });
+
+  console.log(doc);
+
+  if (doc) {
+    res.json({
+      success: true,
+      data: doc
+    })
+  } else {
+    res.json({
+      success: false,
+      data: null,
+      code: errorCode.NOT_EXSIT,
+      msg: errorMsg.NOT_EXSIT,
+    })
+  }
+
+
+
+
+})
+
 router.get('/checkname', async (req, res, next) => {
 
   let userName = req.query.userName
@@ -89,7 +122,7 @@ router.get('/checkname', async (req, res, next) => {
     userName: userName
   });
 
- 
+
 
   if (doc) {
     res.json({

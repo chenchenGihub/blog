@@ -2,7 +2,7 @@
  * @Description: 布局
  * @Author: chenchen
  * @Date: 2019-03-10 01:08:09
- * @LastEditTime: 2019-04-11 15:58:31
+ * @LastEditTime: 2019-04-12 17:56:26
  -->
 <template>
   <v-app dark>
@@ -68,14 +68,17 @@
             <v-layout row wrap>
               <v-flex xs12>
                 <v-card>
-                  <v-card-title>
-                    <div>
-                      <h5 class="headline mb-0">账号登录</h5>
+                  <v-card-title class="card-title">
+                    <div >
+                      <h5 v-if="!$store.state.user.userInfo.success" class="headline mb-0">账号登录</h5>
+                      <v-avatar v-if="$store.state.user.userInfo.success" :tile="false" size="100px" color="grey lighten-4">
+                        <img :src="$store.state.user.userInfo.avatarUrl" alt="avatar">
+                      </v-avatar>
                     </div>
                   </v-card-title>
                   <template>
                     <v-form v-model="valid">
-                      <v-container fluid>
+                      <v-container fluid v-if="!$store.state.user.userInfo.success">
                         <v-layout wrap>
                           <v-flex xs12>
                             <v-combobox
@@ -150,7 +153,7 @@
                                 <v-card-actions>
                                   <v-spacer></v-spacer>
                                   <v-layout align-center center>
-                                    <v-btn color="error" @click="dialog = false">取消</v-btn>
+                                    <v-btn color="error" @click="dismiss">取消</v-btn>
                                     <v-btn
                                       color="primary"
                                       @click="register"
@@ -166,7 +169,21 @@
                             <v-btn
                               color="info"
                               :disabled="!loginForm.password||!loginForm.userName"
+                              @click="login"
                             >登录</v-btn>
+                          </v-flex>
+                        </v-layout>
+                      </v-container>
+
+                      <v-container fluid v-if="$store.state.user.userInfo.success">
+                        <v-layout wrap>
+                          <v-flex xs12></v-flex>
+                          <v-flex text-xs-center xs12>
+                            <div>{{$store.state.user.userInfo.userName}}</div>
+                          </v-flex>
+                          <v-flex text-xs-center xs12>
+                            <v-btn color="info" @click="login">发表文章</v-btn>
+                            <v-btn color="error" @click="logout">退出登录</v-btn>
                           </v-flex>
                         </v-layout>
                       </v-container>
@@ -174,6 +191,7 @@
                   </template>
                 </v-card>
               </v-flex>
+              
               <!--标题-->
               <v-flex align-center xs12>
                 <v-card light>
@@ -372,7 +390,6 @@ export default {
       this.items;
       return;
     },
-    async login() {},
     nameRules() {
       return [
         v => {
@@ -386,64 +403,99 @@ export default {
           } else {
             return (this.isRaValid = true);
           }
-        },
-        // v => {
-        //   console.log(this.$store.state.user.checknameState.success);
-        //   if (this.$store.state.user.checknameState.success) {
-        //      return (this.isRaValid = true);
-        //   } else {
-        //     return "用户名已存在";
-        //   }
-        // }
+        }
       ];
     }
   },
   methods: {
     showDetail() {},
+    async login() {
+      const data = await this.$store.dispatch("user/login", this.loginForm); 
+    },
+    async logout() {
+
+      const data = await this.$store.dispatch("user/logout", {});
+   
+      
+    },
     async register() {
       this.dialog = false;
-      const data = await this.$store.dispatch(
-        "user/register",
-        this.registerForm
-      );
+      await this.$store.dispatch("user/register", this.registerForm);
+
+      let res = this.$store.state.user.registerState;
+
+      if (res.success) {
+        alert("注册成功");
+      } else {
+        alert("注册失败");
+      }
     },
     async usernameChange(event) {
-      console.log(event);
-
       if (event.trim().length >= 6 && event.trim().length < 10) {
         await this.$store.dispatch("user/checkname", {
           userName: event.trim()
         });
       }
 
-      console.log("www",this.$store.state.user.checknameState.success);
-      if (this.$store.state.user.checknameState.success===false) {
-      let ele   = document.createElement('div');
-        ele.classList = 'v-messages__message message-transition-enter-to err';
+      if (this.$store.state.user.checknameState.success === false) {
+        if (document.querySelector(".err")) {
+          document
+            .querySelector(".v-messages__wrapper")
+            .removeChild(document.querySelector(".err"));
+        }
+        let ele = document.createElement("div");
+        ele.classList = "v-messages__message message-transition-enter-to err";
         ele.innerText = "用户已存在";
-        ele.style = 'color:red'
-        if ( document.querySelector(".v-label")) {
-           document.querySelector(".v-label").style.cssText +="color:red!important;"
+        ele.style = "color:red";
+        if (document.querySelector(".v-label")) {
+          document.querySelector(".v-label").style.cssText +=
+            "color:red!important;";
         }
-         
-        document.querySelector('.v-messages__wrapper').appendChild(ele);
 
-        
-     
-      }else if (this.$store.state.user.checknameState.success===true) {
-        
-      if (document.querySelector('.err')) {
-        document.querySelector('.v-messages__wrapper').removeChild(document.querySelector('.err'))
-      
-         document.querySelector(".v-label").style.color="rgba(255,255,255,0.7)"
-          if (document.querySelector('.err')) {
-           document.querySelector('.err').style.color="rgba(255,255,255,0.7)"
+        document.querySelector(".v-messages__wrapper").appendChild(ele);
+
+        this.isRaValid = false;
+      } else if (this.$store.state.user.checknameState.success === true) {
+        if (document.querySelector(".err")) {
+          document
+            .querySelector(".v-messages__wrapper")
+            .removeChild(document.querySelector(".err"));
+
+          document.querySelector(".v-label").style.color =
+            "rgba(255,255,255,0.7)";
+          if (document.querySelector(".err")) {
+            document.querySelector(".err").style.color =
+              "rgba(255,255,255,0.7)";
+          }
+        }
+
+        document.querySelector(".v-text-field").classList.remove("error--text");
+
+        this.isRaValid = true;
+      }
+    },
+    dismiss() {
+      this.dialog = false;
+      this.resetr();
+    },
+    resetr() {
+      this.registerForm.userName = null;
+      this.registerForm.password = null;
+      this.registerForm.email = null;
+
+      if (document.querySelector(".err")) {
+        document
+          .querySelector(".v-messages__wrapper")
+          .removeChild(document.querySelector(".err"));
+
+        document.querySelector(".v-label").style.color =
+          "rgba(255,255,255,0.7)";
+        if (document.querySelector(".err")) {
+          document.querySelector(".err").style.color = "rgba(255,255,255,0.7)";
         }
       }
-         
-         document.querySelector(".v-text-field").classList.remove('error--text')
-      }
-      
+
+      document.querySelector(".v-text-field").classList.remove("error--text");
     }
   },
   created() {
@@ -507,6 +559,11 @@ export default {
 <style scoped>
 .title-text {
   margin-left: 1%;
+}
+.card-title{
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .father-router {
   display: flex;

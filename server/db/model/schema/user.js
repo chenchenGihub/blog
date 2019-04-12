@@ -13,7 +13,8 @@ const UserSchema = new Schema({
   password: USER_SCHEMA.passwordType,
   token: USER_SCHEMA.tokenType,
   device: USER_SCHEMA.deviceType,
-  ip: USER_SCHEMA.ipType
+  ip: USER_SCHEMA.ipType,
+  article:USER_SCHEMA.articleType
 }, {
   timestamps: {
     createdAt: 'createdAt',
