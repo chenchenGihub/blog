@@ -2,7 +2,7 @@
  * @Description: 状态管理
  * @Author: chenchen
  * @Date: 2019-03-28 19:55:16
- * @LastEditTime: 2019-04-12 18:01:32
+ * @LastEditTime: 2019-04-14 23:55:05
  */
 const defaultUserinfo = {
   success: false,
@@ -28,11 +28,13 @@ export const mutations = {
     state.checknameState.success = text.success
   },
   login(state, payload) {
+console.log(payload);
 
     state.userInfo.success = payload.success;
     if (state.userInfo.success) {
-      state.userInfo.avatarUrl = payload.data.avatarUrl
-      state.userInfo.userName = payload.data.userName
+      state.userInfo.avatarUrl = payload.data.avatarUrl;
+      state.userInfo.userName = payload.data.userName;
+      sessionStorage.setItem('token',JSON.stringify(payload.data.token))
     } else {
       state.userInfo = {
         ...defaultUserinfo

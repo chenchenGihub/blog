@@ -2,7 +2,7 @@
  * @Description: 集中配置http请求
  * @Author: chenchen
  * @Date: 2019-03-27 21:17:23
- * @LastEditTime: 2019-04-12 15:57:57
+ * @LastEditTime: 2019-04-15 00:00:19
  */
 const querystring  = require('querystring')
 
@@ -12,12 +12,12 @@ export default function (ctx) {
     const { $axios, redirect } = ctx;
 
     $axios.onRequest(config => {
-     
+        config.headers.Authorization = sessionStorage.getItem('token');
     });
 
 
     $axios.onResponse(response => {
-       console.log(response);
+       
 
        if (response.data && response.data.success===false) {
            alert(response.data.msg)

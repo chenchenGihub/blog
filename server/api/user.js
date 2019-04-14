@@ -1,16 +1,26 @@
+/*
+ * @Description: file content
+ * @Author: chenchen
+ * @Date: 2019-04-12 20:07:01
+ * @LastEditTime: 2019-04-15 00:13:05
+ */
 const {
   Router
 } = require('express');
 
 const router = Router();
 
-// const UserModel = require('../db/model/user');
+const { createToken } = require('../utils/createToken');
+const { decodedToken } = require('../utils/decodeToken');
+
 const UserModel = require('../db/model/user');
 
 const {
   errorCode,
   errorMsg
 } = require('../error.conf')
+
+const { secretKey } = require('../config');
 
 
 router.put('/register', async (req, res, next) => {
@@ -50,46 +60,55 @@ router.put('/register', async (req, res, next) => {
       success: false
     })
 
-
   }
-
-
-  //   User.save((err, docs) => {
-  //     if (err) {
-  //       res.json({
-  //         success: false
-  //       })
-  //       throw err
-  //     }
-
-
-  //     consola.ready(docs);
-
-  //   })
-
-
 
 })
 
 router.put('/login', async (req, res, next) => {
 
   const {
-    userName
+    userName,
+    password
   } = req.body;
 
-  
 
+/**
+ * 生成客户端的token
+ */
+  let clientToken = await createToken({
+    userName,
+    password
+  }, secretKey, 1, "h");
+
+  /**
+   * 生成服务端的token
+   */
+
+   let serverToken = await createToken({
+     userName,
+     password
+   },secretKey,7,"d")
+
+
+
+let timestamp = Math.floor(Date.now()/1000);
+
+  let decoded = await decodedToken(clientToken, secretKey);
 
   const doc = await UserModel.findOne({
     userName: userName
   });
 
-  console.log(doc);
-
   if (doc) {
+
+    const ress = await UserModel.updateOne({ userName: userName }, { token: serverToken })
+
+    console.log(ress);
+
+
     res.json({
       success: true,
-      data: doc
+      data: {...doc._doc,token:clientToken}
     })
   } else {
     res.json({
