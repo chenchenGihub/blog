@@ -2,7 +2,7 @@
  * @Description: 集中配置http请求
  * @Author: chenchen
  * @Date: 2019-03-27 21:17:23
- * @LastEditTime: 2019-04-15 00:00:19
+ * @LastEditTime: 2019-04-15 09:29:36
  */
 const querystring  = require('querystring')
 
@@ -20,7 +20,11 @@ export default function (ctx) {
        
 
        if (response.data && response.data.success===false) {
-           alert(response.data.msg)
+        //    alert(response.data.msg)
+
+           if ( response.data.code===10004 || response.data.code===10005) {
+               redirect('/')
+           }
        }
        
     });

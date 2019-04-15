@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-04-10 18:50:38
- * @LastEditTime: 2019-04-15 01:22:55
+ * @LastEditTime: 2019-04-15 09:32:00
  */
 const express = require('express')
 const consola = require('consola')
@@ -26,7 +26,12 @@ const { secretKey } = require('./config');
 
 const api = require('./api')
 
-const { decodedToken } = require('./utils/decodeToken')
+const { decodedToken } = require('./utils/decodeToken');
+
+const {
+  errorCode,
+  errorMsg
+} = require('./error.conf')
 
 async function start() {
 
@@ -66,15 +71,57 @@ async function start() {
 
   app.all('*', async (req, res, next) => {
 
-    let token
+    let token;
 
-
+    let doc;
 
     if (req.headers.authorization) {
 
       try {
-        token = await decodedToken(req.headers.authorization.substring(1, req.headers.authorization.length - 1), secretKey)
+
+        token = await decodedToken(req.headers.authorization.substring(1, req.headers.authorization.length - 1), secretKey);
+
+
+        console.log(token.exp);
+        let now = Math.floor(Date.now() / 1000);
+        console.log(token.iat);
+
+        if (token.exp < now) {
+          
+          console.log('token过期');
+
+          res.json({
+            success: false,
+            data: null,
+            code: errorCode.OUT_OF_DATE,
+            msg: errorMsg.OUT_OF_DATE
+          })
+        }
+
+        doc = await UserModel.findOne({
+          userName: token.userName
+        });
+
+        if (!doc) {
+          res.json({
+            success: false,
+            data: null,
+            code: errorCode.NOT_EXSIT,
+            msg: errorMsg.NOT_EXSIT
+          })
+        }
+
+
+
+
       } catch (error) {
+
+        res.json({
+          success: false,
+          data: null,
+          code: errorCode.INVALID_TOEKN,
+          msg: errorMsg.INVALID_TOEKN
+        })
 
       }
 

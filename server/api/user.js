@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-04-12 20:07:01
- * @LastEditTime: 2019-04-15 00:13:05
+ * @LastEditTime: 2019-04-15 08:58:18
  */
 const {
   Router
@@ -24,13 +24,13 @@ const { secretKey } = require('../config');
 
 
 router.put('/register', async (req, res, next) => {
-  let User = new UserModel;
-  console.log(req.body.userName);
 
+  let User = new UserModel;
+  
   const doc = await UserModel.findOne({
     userName: req.body.userName
   });
-  console.log(doc);
+ 
   if (doc) {
     return res.json({
       success: false,
@@ -93,7 +93,7 @@ router.put('/login', async (req, res, next) => {
 
 let timestamp = Math.floor(Date.now()/1000);
 
-  let decoded = await decodedToken(clientToken, secretKey);
+ 
 
   const doc = await UserModel.findOne({
     userName: userName
