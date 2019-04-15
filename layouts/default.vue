@@ -2,7 +2,7 @@
  * @Description: 布局
  * @Author: chenchen
  * @Date: 2019-03-10 01:08:09
- * @LastEditTime: 2019-04-12 17:56:26
+ * @LastEditTime: 2019-04-15 10:48:02
  -->
 <template>
   <v-app dark>
@@ -69,9 +69,14 @@
               <v-flex xs12>
                 <v-card>
                   <v-card-title class="card-title">
-                    <div >
+                    <div>
                       <h5 v-if="!$store.state.user.userInfo.success" class="headline mb-0">账号登录</h5>
-                      <v-avatar v-if="$store.state.user.userInfo.success" :tile="false" size="100px" color="grey lighten-4">
+                      <v-avatar
+                        v-if="$store.state.user.userInfo.success"
+                        :tile="false"
+                        size="100px"
+                        color="grey lighten-4"
+                      >
                         <img :src="$store.state.user.userInfo.avatarUrl" alt="avatar">
                       </v-avatar>
                     </div>
@@ -182,7 +187,7 @@
                             <div>{{$store.state.user.userInfo.userName}}</div>
                           </v-flex>
                           <v-flex text-xs-center xs12>
-                            <v-btn color="info" @click="login">发表文章</v-btn>
+                            <v-btn color="info" nuxt to="/publishArticel">发表文章</v-btn>
                             <v-btn color="error" @click="logout">退出登录</v-btn>
                           </v-flex>
                         </v-layout>
@@ -191,7 +196,7 @@
                   </template>
                 </v-card>
               </v-flex>
-              
+
               <!--标题-->
               <v-flex align-center xs12>
                 <v-card light>
@@ -410,13 +415,10 @@ export default {
   methods: {
     showDetail() {},
     async login() {
-      const data = await this.$store.dispatch("user/login", this.loginForm); 
+      const data = await this.$store.dispatch("user/login", this.loginForm);
     },
     async logout() {
-
       const data = await this.$store.dispatch("user/logout", {});
-   
-      
     },
     async register() {
       this.dialog = false;
@@ -560,7 +562,7 @@ export default {
 .title-text {
   margin-left: 1%;
 }
-.card-title{
+.card-title {
   display: flex;
   justify-content: center;
   align-items: center;

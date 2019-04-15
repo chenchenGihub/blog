@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-03-10 01:08:09
- * @LastEditTime: 2019-03-28 22:32:07
+ * @LastEditTime: 2019-04-15 13:05:11
  */
 const pkg = require('./package')
 
@@ -41,7 +41,10 @@ module.exports = {
   ** Global CSS
   */
   css: [
-    '~/assets/style/app.styl'
+    '~/assets/style/app.styl',
+    'quill/dist/quill.snow.css',
+    'quill/dist/quill.bubble.css',
+    'quill/dist/quill.core.css'
   ],
 
   /*
@@ -49,7 +52,8 @@ module.exports = {
   */
   plugins: [
     '@/plugins/vuetify',
-    '~/plugins/axios'
+    '~/plugins/axios',
+    { src: '~plugins/nuxt-quill-plugin.js', ssr: false }
   ],
 
   /*

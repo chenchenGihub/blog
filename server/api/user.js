@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-04-12 20:07:01
- * @LastEditTime: 2019-04-15 08:58:18
+ * @LastEditTime: 2019-04-15 10:22:29
  */
 const {
   Router
@@ -89,9 +89,6 @@ router.put('/login', async (req, res, next) => {
      password
    },secretKey,7,"d")
 
-
-
-let timestamp = Math.floor(Date.now()/1000);
 
  
 

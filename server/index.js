@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-04-10 18:50:38
- * @LastEditTime: 2019-04-15 09:32:00
+ * @LastEditTime: 2019-04-15 10:43:51
  */
 const express = require('express')
 const consola = require('consola')
@@ -27,6 +27,9 @@ const { secretKey } = require('./config');
 const api = require('./api')
 
 const { decodedToken } = require('./utils/decodeToken');
+
+
+const UserModel = require('./db/model/user');
 
 const {
   errorCode,
@@ -81,29 +84,12 @@ async function start() {
 
         token = await decodedToken(req.headers.authorization.substring(1, req.headers.authorization.length - 1), secretKey);
 
-
-        console.log(token.exp);
-        let now = Math.floor(Date.now() / 1000);
-        console.log(token.iat);
-
-        if (token.exp < now) {
-          
-          console.log('token过期');
-
-          res.json({
-            success: false,
-            data: null,
-            code: errorCode.OUT_OF_DATE,
-            msg: errorMsg.OUT_OF_DATE
-          })
-        }
-
         doc = await UserModel.findOne({
           userName: token.userName
         });
 
         if (!doc) {
-          res.json({
+        return res.json({
             success: false,
             data: null,
             code: errorCode.NOT_EXSIT,
@@ -111,12 +97,12 @@ async function start() {
           })
         }
 
-
-
-
       } catch (error) {
 
-        res.json({
+        console.log(error);
+        
+
+      return  res.json({
           success: false,
           data: null,
           code: errorCode.INVALID_TOEKN,
@@ -125,31 +111,24 @@ async function start() {
 
       }
 
-
     }
-
 
     next();
 
-
-
   });
 
-
   app.use('/api', api)
-
-
 
   // Give nuxt middleware to express
   app.use(nuxt.render)
 
-
-
   // Listen the server
   app.listen(port, host)
+  
   consola.ready({
     message: `Server listening on http://${host}:${port}`,
     badge: true
   })
+
 }
 start()
