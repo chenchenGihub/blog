@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-04-10 18:50:38
- * @LastEditTime: 2019-04-15 10:43:51
+ * @LastEditTime: 2019-04-16 09:01:01
  */
 const express = require('express')
 const consola = require('consola')
@@ -18,23 +18,20 @@ const bodyParser = require('body-parser')
 let config = require('../nuxt.config.js')
 config.dev = !(process.env.NODE_ENV === 'production')
 
-const jwt = require('jsonwebtoken');
+
 
 const { DBURL } = require('./config')
 
-const { secretKey } = require('./config');
+
 
 const api = require('./api')
 
-const { decodedToken } = require('./utils/decodeToken');
+
+const { filter } = require('./middleware/filter')
 
 
-const UserModel = require('./db/model/user');
 
-const {
-  errorCode,
-  errorMsg
-} = require('./error.conf')
+
 
 async function start() {
 
@@ -72,50 +69,7 @@ async function start() {
 
   // app.use(checkToken)
 
-  app.all('*', async (req, res, next) => {
-
-    let token;
-
-    let doc;
-
-    if (req.headers.authorization) {
-
-      try {
-
-        token = await decodedToken(req.headers.authorization.substring(1, req.headers.authorization.length - 1), secretKey);
-
-        doc = await UserModel.findOne({
-          userName: token.userName
-        });
-
-        if (!doc) {
-        return res.json({
-            success: false,
-            data: null,
-            code: errorCode.NOT_EXSIT,
-            msg: errorMsg.NOT_EXSIT
-          })
-        }
-
-      } catch (error) {
-
-        console.log(error);
-        
-
-      return  res.json({
-          success: false,
-          data: null,
-          code: errorCode.INVALID_TOEKN,
-          msg: errorMsg.INVALID_TOEKN
-        })
-
-      }
-
-    }
-
-    next();
-
-  });
+  // app.all('*', filter);
 
   app.use('/api', api)
 
@@ -124,7 +78,7 @@ async function start() {
 
   // Listen the server
   app.listen(port, host)
-  
+
   consola.ready({
     message: `Server listening on http://${host}:${port}`,
     badge: true

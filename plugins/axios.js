@@ -2,7 +2,7 @@
  * @Description: 集中配置http请求
  * @Author: chenchen
  * @Date: 2019-03-27 21:17:23
- * @LastEditTime: 2019-04-15 10:29:26
+ * @LastEditTime: 2019-04-16 09:31:26
  */
 const querystring  = require('querystring')
 
@@ -11,7 +11,11 @@ export default function (ctx) {
     const { $axios, redirect } = ctx;
 
     $axios.onRequest(config => {
-        config.headers.Authorization = sessionStorage.getItem('token') || '';
+        
+        if (config.url==='localhost') {
+            config.headers.Authorization = sessionStorage.getItem('token') || '';
+        }
+        
     });
 
     $axios.onResponse(response => {
