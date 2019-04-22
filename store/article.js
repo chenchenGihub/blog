@@ -2,11 +2,12 @@
  * @Description: 文章的状态管理
  * @Author: chenchen
  * @Date: 2019-03-28 19:55:16
- * @LastEditTime: 2019-04-22 17:01:25
+ * @LastEditTime: 2019-04-22 17:31:50
  */
 export const state = () => ({
   articelListRes: {
     articelList:[],
+    total:0,
     success:false
   },
   publishArticleRes:{
@@ -16,7 +17,8 @@ export const state = () => ({
 
 export const mutations = {
   getArticle(state, pl) {
-    state.articelListRes.articelList = [...pl.data];
+    state.articelListRes.articelList = [...pl.data.articles];
+    state.articelListRes.total = pl.data.total;
     state.articelListRes.success = true;
   },
   publishArticle(state,payload){
@@ -30,7 +32,9 @@ export const actions = {
   }, params) {
     let data
     try {
-      data = await this.$axios.$get('/api/article');
+      data = await this.$axios.$get('/api/article',{
+        params: params
+      });
       commit('getArticle', data)
     } catch (error) {
      

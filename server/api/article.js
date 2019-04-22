@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-04-12 20:07:01
- * @LastEditTime: 2019-04-22 14:35:48
+ * @LastEditTime: 2019-04-22 17:30:58
  */
 
 const { Router } = require('express');
@@ -20,15 +20,27 @@ router.all("/article", auths)
 
 router.get('/article', async (req, res, next) => {
 
-    let articles;
+    console.log(req.query);
+    let { skip, count } = req.query;
 
-    articles = await Article.find({})
+    let articles,total;
+
+    try {
+        articles = await Article.find({},null, { skip: +skip, limit: +count });
+        total    = await Article.count();
+
+    } catch (error) {
+        console.log(error);
+        
+    }
+
+   
 
     res.json({
         success: false,
-        data:articles,
-        errorCode:null,
-        errorMsg:null,
+        data: {articles,total},
+        errorCode: null,
+        errorMsg: null,
     })
 
 })
@@ -65,34 +77,34 @@ router.post("/publishArticle", async (req, res, next) => {
 
     try {
 
-     let data =  await article.save();
+        let data = await article.save();
 
-     if (!data) {
+        if (!data) {
 
-         res.json({
-             success:false,
-             data:null,
-             code:errorCode.ARTICEL_NOT_EXSIT,
-             msg:errorMsg.ARTICEL_NOT_EXSIT
-         })
-         
-     }else{
+            res.json({
+                success: false,
+                data: null,
+                code: errorCode.ARTICEL_NOT_EXSIT,
+                msg: errorMsg.ARTICEL_NOT_EXSIT
+            })
 
-        res.json({
-            success:true,
-            data:null,
-            code:null,
-            msg:null
-        })
+        } else {
 
-     }
+            res.json({
+                success: true,
+                data: null,
+                code: null,
+                msg: null
+            })
+
+        }
 
     } catch (error) {
         res.json({
-            success:false,
-            data:null,
-            code:errorCode.DATABASE_ERROR,
-            msg:errorMsg.DATABASE_ERROR
+            success: false,
+            data: null,
+            code: errorCode.DATABASE_ERROR,
+            msg: errorMsg.DATABASE_ERROR
         })
     }
 

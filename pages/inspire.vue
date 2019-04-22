@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-03-20 08:52:56
- * @LastEditTime: 2019-04-22 16:42:19
+ * @LastEditTime: 2019-04-22 17:33:23
  -->
 <template>
 
@@ -36,7 +36,7 @@
                 <v-card-title primary-title>
                   <div class="body">
                     <div class="headline">{{item.title}}</div>
-                    <div>{{item.content.length>150 ? item.content.slice(0,100)+'...' : item.content }}</div>
+                    <div>{{item.text.length>150 ? item.text.slice(0,100)+'...' : item.text }}</div>
 
                   </div>
                 </v-card-title>
@@ -46,7 +46,7 @@
                     color="orange"
                   >分享</v-btn> -->
                   <v-btn
-                    v-if="item.content.length>150"
+                    v-if="item.text.length>150"
                     flat
                     color="orange"
                   >查看全部</v-btn>
@@ -85,7 +85,7 @@
         </v-flex>
 
       </v-layout>
-      <Pagination></Pagination>
+      <Pagination :total="total"></Pagination>
     </v-container>
 
   </v-card>
@@ -99,24 +99,28 @@ export default {
   },
   data() {
     return {
+      searchParams: {
+        skip: 0,
+        count: 5
+      },
       articleList: []
     };
   },
-  methods: {},
+  methods: {
+    async loadData() {
+      
+    }
+  },
   async asyncData({ store }) {
+
+   await store.dispatch("article/getArticle", {skip:0,count:5});
+
     return {
-      articleList: [
-        {
-          userName: "嗔恨",
-          title: "分享webpack升级之路",
-          content: `在自己做东西时遇见了这么个问题，button在chrome浏览器下被点击时会出现一个橙色的边框即使当时在button上添加 :focus{outline:none;}也无法解决问题，很急。解决办法：在button上添加 :focus{outline:0;} 才得以解决。思考来源:转自：http://blog.csdn.net/qq_26222859/article/details/51516011`
-        }
-      ]
+      articleList: [...store.state.article.articelListRes.articelList],
+      total:store.state.article.articelListRes.total
     };
   },
-  async fetch({ store }) {
-    await store.dispatch("article/getArticle", {});
-  },
+  async fetch({ store }) {},
   async created() {}
 };
 </script>
