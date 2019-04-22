@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-03-10 01:08:09
- * @LastEditTime: 2019-04-22 13:33:01
+ * @LastEditTime: 2019-04-22 16:22:36
  */
 const webpack=require('webpack'); 
 const pkg = require('./package')
@@ -56,7 +56,8 @@ module.exports = {
     '@/plugins/vuetify',
     '~/plugins/axios',
     { src: '~plugins/nuxt-quill-plugin.js', ssr: false },
-    { src: '~plugins/vuex-persist.js', ssr: false }
+    { src: '~plugins/vuex-persist.js', ssr: false },
+    '~/plugins/route'
   ],
 
   /*
@@ -80,7 +81,8 @@ module.exports = {
       }
     },
     router: {
-      linkActiveClass: 'active-link'
+      linkActiveClass: 'active-link',
+      middleware: 'auth'
     },
     /*
     ** You can extend webpack config here

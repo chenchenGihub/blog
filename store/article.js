@@ -2,7 +2,7 @@
  * @Description: 文章的状态管理
  * @Author: chenchen
  * @Date: 2019-03-28 19:55:16
- * @LastEditTime: 2019-04-22 14:47:50
+ * @LastEditTime: 2019-04-22 17:01:25
  */
 export const state = () => ({
   articelListRes: {
@@ -28,13 +28,16 @@ export const actions = {
   async getArticle({
     commit
   }, params) {
-
-    const data = await this.$axios.$get('/api/article');
-
-    console.log(data);
+    let data
+    try {
+      data = await this.$axios.$get('/api/article');
+      commit('getArticle', data)
+    } catch (error) {
+     
+    }
     
 
-    commit('getArticle', data)
+    
   },
   async publishArticle({ commit }, params) {
     const data = await this.$axios.$post('/api/publishArticle',params)

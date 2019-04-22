@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-04-12 20:07:01
- * @LastEditTime: 2019-04-22 14:12:25
+ * @LastEditTime: 2019-04-22 17:00:54
  */
 const {
   Router
@@ -103,9 +103,7 @@ router.put('/login', async (req, res, next) => {
 
     const ress = await UserModel.updateOne({ userName: userName }, { token: serverToken })
 
-    console.log(ress);
-
-
+  
     res.json({
       success: true,
       data: {...doc._doc,token:clientToken}

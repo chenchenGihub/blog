@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-03-20 08:52:56
- * @LastEditTime: 2019-04-22 15:36:57
+ * @LastEditTime: 2019-04-22 16:42:19
  -->
 <template>
 
@@ -99,18 +99,11 @@ export default {
   },
   data() {
     return {
-      articleList: [
-       
-      ]
+      articleList: []
     };
   },
-  methods: {
-    
-  },
+  methods: {},
   async asyncData({ store }) {
-    
-    // await store.dispatch("article/getArticle", {});
-
     return {
       articleList: [
         {
@@ -122,11 +115,9 @@ export default {
     };
   },
   async fetch({ store }) {
-
+    await store.dispatch("article/getArticle", {});
   },
-  created() {
-    console.log("2222",this.$store.state.user.userInfo);
-  }
+  async created() {}
 };
 </script>
 <style scoped>

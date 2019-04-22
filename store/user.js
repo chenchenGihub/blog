@@ -2,7 +2,7 @@
  * @Description: 状态管理
  * @Author: chenchen
  * @Date: 2019-03-28 19:55:16
- * @LastEditTime: 2019-04-22 15:18:51
+ * @LastEditTime: 2019-04-22 17:01:29
  */
 const defaultUserinfo = {
   success: false,
@@ -35,7 +35,8 @@ export const mutations = {
       state.userInfo.avatarUrl = payload.data.avatarUrl;
       state.userInfo.userName = payload.data.userName;
       state.userInfo.id = payload.data._id;
-      state.userInfo.token = payload.data.token
+      // state.userInfo.token = payload.data.token
+      sessionStorage.setItem('token',payload.data.token)
     } else {
       state.userInfo = {
         ...defaultUserinfo
@@ -85,7 +86,7 @@ export const actions = {
   async logout({
     commit, state
   }, payload) {
-    console.log(state.userInfo);
+   
 
     const data = await this.$axios.$put('/api/logout', { id: state.userInfo._id });
 
