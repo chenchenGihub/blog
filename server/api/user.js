@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-04-12 20:07:01
- * @LastEditTime: 2019-04-15 10:22:29
+ * @LastEditTime: 2019-04-22 14:12:25
  */
 const {
   Router
@@ -57,7 +57,10 @@ router.put('/register', async (req, res, next) => {
   } catch (error) {
 
     res.json({
-      success: false
+      success: false,
+      data: null,
+      code: errorCode.DATABASE_ERROR,
+      msg: errorMsg.DATABASE_ERROR
     })
 
   }

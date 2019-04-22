@@ -2,14 +2,34 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-03-20 08:52:56
- * @LastEditTime: 2019-04-15 15:38:02
+ * @LastEditTime: 2019-04-22 14:25:49
  -->
 <template>
-  
-    <v-container fluid grid-list-lg>
-     <Quilleditor></Quilleditor>
-    </v-container>
- 
+  <div>
+    <div class="container">
+      <div class="title">标题</div>
+      <textarea
+        class="textarea"
+        name=""
+        id=""
+        cols="30"
+        rows="1"
+        v-model="contentForm.title"
+      />
+      </div>
+       <div class="content">内容</div>
+    <Quilleditor 
+      ref="Quilleditor"
+      @editorContent="editorContent"
+      @editorContentText="editorContentText"
+      
+    ></Quilleditor>
+    <div class="btn">
+      <v-btn :disabled="!contentForm.title||!contentForm.html" color="info" @click="submit">提交</v-btn>
+       <v-btn :disabled="!contentForm.title && !contentForm.html" color="error">重置</v-btn>
+    </div>
+
+</div>
 </template>
 <script>
 import Quilleditor from "~/components/Quilleditor.vue";
@@ -19,46 +39,67 @@ export default {
   },
   data() {
     return {
-        content: '<p>I am Example</p>',
-        editorOption: {
-          // some quill options
-          modules: {
-            toolbar: [
-              ['bold', 'italic', 'underline', 'strike'],
-              ['blockquote', 'code-block']
-            ]
-          }
-        }
+      contentForm:{
+        title:'',
+        text:'',
+        html:''
       }
-  },
-  methods: {
-    onEditorBlur(editor) {
-        console.log('editor blur!', editor)
-      },
-      onEditorFocus(editor) {
-        console.log('editor focus!', editor)
-      },
-      onEditorReady(editor) {
-        console.log('editor ready!', editor)
-      },
-      onEditorChange({ editor, html, text }) {
-        console.log('editor change!', editor, html, text)
-        this.content = html
-      }
-  },
-  computed: {
-    editor() {
-      return this.$refs.myQuillEditor.quill;
     }
   },
+  methods: {
+    editorContent(html){
+      this.contentForm.html = html;
+    },
+    editorContentText(text){
+      this.contentForm.text = text
+    },
+   async submit(){
+    
+    const data =  await this.$store.dispatch("article/publishArticle", {...this.contentForm,id:this.$store.state.user.userInfo.id});
+
+    let success = this.$store.state.article.publishArticleRes.success;
+
+    if (success) {
+      this.$router.push('/inspire');
+    }
+
+    
+
+    }
+  },
+  computed: {},
   async asyncData({ $axios }) {},
-  async fetch({ store }) {
-       console.log('app init, my quill insrance object is:', this.myQuillEditor)
-      setTimeout(() => {
-        this.content = 'i am changed'
-      }, 3000)
-  }
+  async fetch({ store }) {}
 };
 </script>
+
 <style scoped>
+.title {
+  color: black;
+  margin-bottom: 12px;
+}
+.content {
+  font-size: 20px !important;
+  font-weight: 500;
+  line-height: 1 !important;
+  letter-spacing: 0.02em !important;
+  font-family: "Roboto", sans-serif !important;
+  color: #000;
+}
+.textarea {
+  border: 1px solid #ccc;
+  flex: 1 1 100%;
+  margin: auto;
+  padding: 24px;
+  width: 100%;
+  color: black;
+}
+
+textarea {
+  outline: none;
+  resize: none;
+}
+.btn{
+  margin-top: 40px;
+}
 </style>

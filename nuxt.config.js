@@ -2,8 +2,9 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-03-10 01:08:09
- * @LastEditTime: 2019-04-15 13:05:11
+ * @LastEditTime: 2019-04-22 13:33:01
  */
+const webpack=require('webpack'); 
 const pkg = require('./package')
 
 
@@ -44,7 +45,8 @@ module.exports = {
     '~/assets/style/app.styl',
     'quill/dist/quill.snow.css',
     'quill/dist/quill.bubble.css',
-    'quill/dist/quill.core.css'
+    'quill/dist/quill.core.css',
+    'highlight.js/styles/xcode.css'
   ],
 
   /*
@@ -53,7 +55,8 @@ module.exports = {
   plugins: [
     '@/plugins/vuetify',
     '~/plugins/axios',
-    { src: '~plugins/nuxt-quill-plugin.js', ssr: false }
+    { src: '~plugins/nuxt-quill-plugin.js', ssr: false },
+    { src: '~plugins/vuex-persist.js', ssr: false }
   ],
 
   /*
@@ -82,9 +85,12 @@ module.exports = {
     /*
     ** You can extend webpack config here
     */
+   
     extend(config, ctx) {
-     
-      
+      config.plugins.push(new webpack.ProvidePlugin({
+        'window.Quill': 'quill/dist/quill.js',
+        'Quill': 'quill/dist/quill.js'
+      }))
     }
   }
 }

@@ -1,8 +1,14 @@
+/*
+ * @Description: file content
+ * @Author: chenchen
+ * @Date: 2019-04-12 20:07:01
+ * @LastEditTime: 2019-04-22 13:06:08
+ */
 const {
   Schema
 } = require('mongoose');
 
-const ARTICEL_SCHEMA = {
+exports.ARTICEL_SCHEMA = {
     authorIdType: {
       type:String
     },
@@ -11,7 +17,7 @@ const ARTICEL_SCHEMA = {
       trim: true,
       require: true,
       minlength: [6, "标题长度必须大于等于6位"],
-      maxlength: [30, "标题长度必须小于等于30位"],
+      maxlength: [30, "标题长度必须小于等于100位"],
       alias: 't'
     },
     contentType: {
@@ -21,19 +27,28 @@ const ARTICEL_SCHEMA = {
       minlength: [1, "文本内容必填"],
       maxlength: [1000, "文本内容不能超过1000"],
       alias: 'c'
+    },
+    htmlType:{
+      type: String,
+      trim: true,
+      require: true,
+      minlength: [1, "html内容必填"],
+      maxlength: [1000, "html内容不能超过1000"],
+      alias: 'h'
     }
   };
 
- const articleSchema = new Schema({
-    authorId: ARTICEL_SCHEMA.authorIdType,
-    titleType:ARTICEL_SCHEMA.titleType,
-    contentType: ARTICEL_SCHEMA.contentType,
-  }, {
-    timestamps: {
-      createdAt: 'createdAt',
-      updatedAt: 'updatedAt'
-    }
-  });
+//  const articleSchema = new Schema({
+//     authorIdType: ARTICEL_SCHEMA.authorIdType,
+//     titleType:ARTICEL_SCHEMA.titleType,
+//     contentType: ARTICEL_SCHEMA.contentType,
+//     htmlType: ARTICEL_SCHEMA.htmlType,
+//   }, {
+//     timestamps: {
+//       createdAt: 'createdAt',
+//       updatedAt: 'updatedAt'
+//     }
+//   });
 
 exports.USER_SCHEMA = {
   userNameType: {
@@ -73,7 +88,7 @@ exports.USER_SCHEMA = {
   deviceType: [String],
   ipType: [String],
   articleType: [
-    articleSchema
+    // articleSchema
   ]
 }
 

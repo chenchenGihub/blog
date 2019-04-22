@@ -2,19 +2,22 @@
  * @Description: 集中配置http请求
  * @Author: chenchen
  * @Date: 2019-03-27 21:17:23
- * @LastEditTime: 2019-04-16 09:31:26
+ * @LastEditTime: 2019-04-22 15:19:10
  */
 const querystring  = require('querystring')
 
 export default function (ctx) {
    
-    const { $axios, redirect } = ctx;
+    const { $axios, redirect,store } = ctx;
+
+   console.log(store.state.user);
+   
 
     $axios.onRequest(config => {
         
-        if (config.url==='localhost') {
-            config.headers.Authorization = sessionStorage.getItem('token') || '';
-        }
+       
+            config.headers.Authorization = store.state.user.userInfo.token || '';
+       
         
     });
 
@@ -23,7 +26,10 @@ export default function (ctx) {
        if (response.data && response.data.success===false) {
        
            if ( response.data.code===10004 || response.data.code===10005) {
-               sessionStorage.getItem('token') && sessionStorage.removeItem('token');
+
+            console.log(response.data.code);
+            
+              
                redirect('/');
            }
        }

@@ -2,7 +2,7 @@
  * @Description: 布局
  * @Author: chenchen
  * @Date: 2019-03-10 01:08:09
- * @LastEditTime: 2019-04-15 10:48:02
+ * @LastEditTime: 2019-04-22 15:37:28
  -->
 <template>
   <v-app dark>
@@ -416,6 +416,9 @@ export default {
     showDetail() {},
     async login() {
       const data = await this.$store.dispatch("user/login", this.loginForm);
+
+      console.log(this.$store.state.user.userInfo);
+      
     },
     async logout() {
       const data = await this.$store.dispatch("user/logout", {});
@@ -555,6 +558,9 @@ export default {
     }
 
     this.registerForm.device = platform + " " + browser;
+  },
+  mounted() {
+     console.log("111",this.$store.state.user.userInfo);
   }
 };
 </script>

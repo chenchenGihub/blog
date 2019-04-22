@@ -1,3 +1,9 @@
+/*
+ * @Description: file content
+ * @Author: chenchen
+ * @Date: 2019-04-12 20:07:01
+ * @LastEditTime: 2019-04-22 13:56:15
+ */
 const mongoose = require('mongoose')
 
 const {
@@ -9,9 +15,10 @@ const {
 } = require('./schema.conf')
 
 const ArticelSchema = new Schema({
-  authorId: ARTICEL_SCHEMA.authorId,
-  titleType: ARTICEL_SCHEMA.titleType,
-  contentType: ARTICEL_SCHEMA.contentType,
+  authorId: {type:String},
+  title: ARTICEL_SCHEMA.titleType,
+  text: ARTICEL_SCHEMA.contentType,
+  html:ARTICEL_SCHEMA.htmlType
 }, {
   timestamps: {
     createdAt: 'createdAt',

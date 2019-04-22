@@ -2,12 +2,13 @@
  * @Description: 状态管理
  * @Author: chenchen
  * @Date: 2019-03-28 19:55:16
- * @LastEditTime: 2019-04-14 23:55:05
+ * @LastEditTime: 2019-04-22 15:18:51
  */
 const defaultUserinfo = {
   success: false,
   avatarUrl: '',
-  userName: ''
+  userName: '',
+  id: ''
 }
 export const state = () => ({
   registerState: {
@@ -28,13 +29,13 @@ export const mutations = {
     state.checknameState.success = text.success
   },
   login(state, payload) {
-console.log(payload);
 
     state.userInfo.success = payload.success;
     if (state.userInfo.success) {
       state.userInfo.avatarUrl = payload.data.avatarUrl;
       state.userInfo.userName = payload.data.userName;
-      sessionStorage.setItem('token',JSON.stringify(payload.data.token))
+      state.userInfo.id = payload.data._id;
+      state.userInfo.token = payload.data.token
     } else {
       state.userInfo = {
         ...defaultUserinfo
@@ -43,7 +44,7 @@ console.log(payload);
 
   },
   logout(state, payload) {
-    
+    state.userInfo = { ...defaultUserinfo }
   }
 }
 
@@ -57,7 +58,7 @@ export const actions = {
     params.ip = ip;
 
     const data = await this.$axios.$put('/api/register', params);
-    
+
     commit('register', data);
 
   },
@@ -82,12 +83,13 @@ export const actions = {
 
   },
   async logout({
-    commit
+    commit, state
   }, payload) {
+    console.log(state.userInfo);
 
-    const data  = await this.$axios.$put('/api/logout',payload);
+    const data = await this.$axios.$put('/api/logout', { id: state.userInfo._id });
 
-    commit("logout",data)
+    commit("logout", data)
 
   }
 
