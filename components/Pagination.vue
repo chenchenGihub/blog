@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-03-26 21:09:13
- * @LastEditTime: 2019-04-22 17:34:56
+ * @LastEditTime: 2019-04-23 09:04:07
  -->
  <template>
   <div class="text-xs-center">
@@ -16,7 +16,7 @@
             <v-card-text >
               <v-pagination
                 v-model="page"
-                :length="total"
+                :length="pages"
                 :total-visible="7"
                 @input="input"
                 @next="next"
@@ -33,18 +33,19 @@
 export default {
   data() {
     return {
-      page: 2
+      page: 1
     };
   },
   props:{
-    total:{
+    pages:{
       type:Number,
       default:0
     }
   },
   methods: {
     input(event) {
-     
+   
+     this.$emit('pagination',event-1)
     },
     next() {
     

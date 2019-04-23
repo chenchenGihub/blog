@@ -2,7 +2,7 @@
  * @Description: 集中配置http请求
  * @Author: chenchen
  * @Date: 2019-03-27 21:17:23
- * @LastEditTime: 2019-04-22 17:00:47
+ * @LastEditTime: 2019-04-22 19:49:23
  */
 const querystring  = require('querystring')
 
@@ -19,6 +19,9 @@ export default function (ctx) {
     $axios.onResponse(response => {
        
        if (response.data && response.data.success===false) {
+
+        console.log(response.data);
+        
        
            if ( response.data.code===10004 || response.data.code===10005) {
            

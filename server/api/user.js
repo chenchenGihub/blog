@@ -1,8 +1,8 @@
 /*
- * @Description: file content
+ * @Description: 用户相关的api
  * @Author: chenchen
  * @Date: 2019-04-12 20:07:01
- * @LastEditTime: 2019-04-22 17:00:54
+ * @LastEditTime: 2019-04-23 17:14:59
  */
 const {
   Router
@@ -26,11 +26,11 @@ const { secretKey } = require('../config');
 router.put('/register', async (req, res, next) => {
 
   let User = new UserModel;
-  
+
   const doc = await UserModel.findOne({
     userName: req.body.userName
   });
- 
+
   if (doc) {
     return res.json({
       success: false,
@@ -75,9 +75,9 @@ router.put('/login', async (req, res, next) => {
   } = req.body;
 
 
-/**
- * 生成客户端的token
- */
+  /**
+   * 生成客户端的token
+   */
   let clientToken = await createToken({
     userName,
     password
@@ -87,13 +87,13 @@ router.put('/login', async (req, res, next) => {
    * 生成服务端的token
    */
 
-   let serverToken = await createToken({
-     userName,
-     password
-   },secretKey,7,"d")
+  let serverToken = await createToken({
+    userName,
+    password
+  }, secretKey, 7, "d")
 
 
- 
+
 
   const doc = await UserModel.findOne({
     userName: userName
@@ -103,10 +103,10 @@ router.put('/login', async (req, res, next) => {
 
     const ress = await UserModel.updateOne({ userName: userName }, { token: serverToken })
 
-  
+
     res.json({
       success: true,
-      data: {...doc._doc,token:clientToken}
+      data: { ...doc._doc, token: clientToken }
     })
   } else {
     res.json({
@@ -156,6 +156,48 @@ router.get('/checkname', async (req, res, next) => {
       msg: null
     })
   }
+
+})
+
+router.put('/togglelike', async (req, res, next) => {
+  let { id } = req.body;
+  let user;
+
+  try {
+    user = await UserModel.findByIdAndUpdate({ _id: id }, { $set: { fans: [''] } })
+
+    if (!user) {
+      return res.json({
+        success: false,
+        data: null,
+        code: errorCode.NOT_EXSIT,
+        msg: errorMsg.NOT_EXSIT
+      })
+    }
+
+  } catch (error) {
+
+    console.log(error);
+
+
+    res.json({
+      success: false,
+      data: null,
+      code: errorCode.DATABASE_ERROR,
+      msg: errorMsg.DATABASE_ERROR
+    })
+
+  }
+
+
+  res.json({
+    success: true,
+    data: null,
+    code: null,
+    msg: null
+  })
+
+
 
 })
 

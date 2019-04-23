@@ -1,3 +1,9 @@
+/*
+ * @Description: 用户原型
+ * @Author: chenchen
+ * @Date: 2019-04-12 20:07:01
+ * @LastEditTime: 2019-04-23 17:28:36
+ */
 const mongoose = require('mongoose')
 
 const {
@@ -14,7 +20,9 @@ const UserSchema = new Schema({
   token: USER_SCHEMA.tokenType,
   device: USER_SCHEMA.deviceType,
   ip: USER_SCHEMA.ipType,
-  article:USER_SCHEMA.articleType
+  article:USER_SCHEMA.articleType,
+  fans:USER_SCHEMA.fansType,
+  role:USER_SCHEMA.roleType
 }, {
   timestamps: {
     createdAt: 'createdAt',

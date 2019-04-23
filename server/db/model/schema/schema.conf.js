@@ -1,8 +1,8 @@
 /*
- * @Description: file content
+ * @Description: 原型类型定义
  * @Author: chenchen
  * @Date: 2019-04-12 20:07:01
- * @LastEditTime: 2019-04-22 13:06:08
+ * @LastEditTime: 2019-04-23 17:29:17
  */
 const {
   Schema
@@ -16,7 +16,7 @@ exports.ARTICEL_SCHEMA = {
       type: String,
       trim: true,
       require: true,
-      minlength: [6, "标题长度必须大于等于6位"],
+      minlength: [1, "标题长度必须大于等于6位"],
       maxlength: [30, "标题长度必须小于等于100位"],
       alias: 't'
     },
@@ -35,20 +35,9 @@ exports.ARTICEL_SCHEMA = {
       minlength: [1, "html内容必填"],
       maxlength: [1000, "html内容不能超过1000"],
       alias: 'h'
-    }
+    },
+    hiddenType:{ type: Boolean, default: false }
   };
-
-//  const articleSchema = new Schema({
-//     authorIdType: ARTICEL_SCHEMA.authorIdType,
-//     titleType:ARTICEL_SCHEMA.titleType,
-//     contentType: ARTICEL_SCHEMA.contentType,
-//     htmlType: ARTICEL_SCHEMA.htmlType,
-//   }, {
-//     timestamps: {
-//       createdAt: 'createdAt',
-//       updatedAt: 'updatedAt'
-//     }
-//   });
 
 exports.USER_SCHEMA = {
   userNameType: {
@@ -88,8 +77,15 @@ exports.USER_SCHEMA = {
   deviceType: [String],
   ipType: [String],
   articleType: [
-    // articleSchema
-  ]
+    Schema.Types.ObjectId
+  ],
+  fansType:[
+    Schema.Types.ObjectId
+  ],
+  roleType:{
+    type:String,
+    default:2 //0最高
+  }
 }
 
 

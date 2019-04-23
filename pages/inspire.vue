@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-03-20 08:52:56
- * @LastEditTime: 2019-04-22 17:33:23
+ * @LastEditTime: 2019-04-23 15:18:43
  -->
 <template>
 
@@ -21,6 +21,7 @@
           :key="index"
         >
           <v-card
+            @click="gotoArticle(item)"
             color="white darken-2"
             class="white--text"
           >
@@ -85,7 +86,10 @@
         </v-flex>
 
       </v-layout>
-      <Pagination :total="total"></Pagination>
+      <Pagination
+        :pages="pages"
+        @pagination="onPageChange"
+      ></Pagination>
     </v-container>
 
   </v-card>
@@ -107,17 +111,32 @@ export default {
     };
   },
   methods: {
-    async loadData() {
-      
+    async loadData() {},
+    async onPageChange(page) {
+      await this.$store.dispatch("article/getArticle", {
+        skip: page * 5,
+        count: 5
+      });
+
+      this.articleList = [
+        ...this.$store.state.article.articelListRes.articelList
+      ];
+    },
+    gotoArticle(article) {
+      this.$router.push({
+        path: "./article",
+        query: {
+          id: article._id
+        }
+      });
     }
   },
   async asyncData({ store }) {
-
-   await store.dispatch("article/getArticle", {skip:0,count:5});
+    await store.dispatch("article/getArticle", { skip: 0, count: 5 });
 
     return {
       articleList: [...store.state.article.articelListRes.articelList],
-      total:store.state.article.articelListRes.total
+      pages: Math.ceil(store.state.article.articelListRes.total / 5)
     };
   },
   async fetch({ store }) {},
