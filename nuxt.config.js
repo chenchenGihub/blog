@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-03-10 01:08:09
- * @LastEditTime: 2019-04-22 16:22:36
+ * @LastEditTime: 2019-04-24 09:50:43
  */
 const webpack=require('webpack'); 
 const pkg = require('./package')
@@ -43,7 +43,7 @@ module.exports = {
   */
   css: [
     '~/assets/style/app.styl',
-    'quill/dist/quill.snow.css',
+    // 'quill/dist/quill.snow.css',
     'quill/dist/quill.bubble.css',
     'quill/dist/quill.core.css',
     'highlight.js/styles/xcode.css'

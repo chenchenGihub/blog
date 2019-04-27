@@ -2,42 +2,42 @@
  * @Description: 原型类型定义
  * @Author: chenchen
  * @Date: 2019-04-12 20:07:01
- * @LastEditTime: 2019-04-23 17:29:17
+ * @LastEditTime: 2019-04-26 11:57:52
  */
 const {
   Schema
 } = require('mongoose');
 
 exports.ARTICEL_SCHEMA = {
-    authorIdType: {
-      type:String
-    },
-    titleType: {
-      type: String,
-      trim: true,
-      require: true,
-      minlength: [1, "标题长度必须大于等于6位"],
-      maxlength: [30, "标题长度必须小于等于100位"],
-      alias: 't'
-    },
-    contentType: {
-      type: String,
-      trim: true,
-      require: true,
-      minlength: [1, "文本内容必填"],
-      maxlength: [1000, "文本内容不能超过1000"],
-      alias: 'c'
-    },
-    htmlType:{
-      type: String,
-      trim: true,
-      require: true,
-      minlength: [1, "html内容必填"],
-      maxlength: [1000, "html内容不能超过1000"],
-      alias: 'h'
-    },
-    hiddenType:{ type: Boolean, default: false }
-  };
+  authorIdType: {
+    type: String
+  },
+  titleType: {
+    type: String,
+    trim: true,
+    require: true,
+    minlength: [1, "标题长度必须大于等于6位"],
+    maxlength: [30, "标题长度必须小于等于100位"],
+    alias: 't'
+  },
+  contentType: {
+    type: String,
+    trim: true,
+    require: true,
+    minlength: [1, "文本内容必填"],
+    maxlength: [1000, "文本内容不能超过1000"],
+    alias: 'c'
+  },
+  htmlType: {
+    type: String,
+    trim: true,
+    require: true,
+    minlength: [1, "html内容必填"],
+    maxlength: [1000, "html内容不能超过1000"],
+    alias: 'h'
+  },
+  hiddenType: { type: Boolean, default: false }
+};
 
 exports.USER_SCHEMA = {
   userNameType: {
@@ -79,17 +79,97 @@ exports.USER_SCHEMA = {
   articleType: [
     Schema.Types.ObjectId
   ],
-  fansType:[
+  fansType: [
     Schema.Types.ObjectId
   ],
-  roleType:{
-    type:String,
-    default:2 //0最高
+  roleType: {
+    type: String,
+    default: 2 //0最高
   }
+}
+
+
+exports.COMMENT_SCHEMA = {
+  votedType: [
+    {
+      userId: {
+        type: String,
+        trim: true,
+        require: true,
+      },
+      userName: {
+        type: String,
+        trim: true,
+        require: true,
+      },
+      avatar: {
+        type: String,
+        require: true
+      }
+    }
+  ],
+  replydataType: [{
+    user: {
+      userId: {
+        type: String,
+        trim: true,
+        require: true,
+      },
+      userName: {
+        type: String,
+        trim: true,
+        require: true,
+      },
+      avatar: {
+        type: String,
+        require: true
+      }
+    },
+    createdTime: {
+      type: Date,
+      default: Date.now()
+    },
+    commentType: {
+      type: String,
+      trim: true,
+      require: true,
+      set: v => v.trim(),
+      get: v => v.trim(),
+      alias: 'c'
+    },
+  }],
+  commentType: {
+    type: String,
+    trim: true,
+    require: true,
+    set: v => v.trim(),
+    get: v => v.trim(),
+    alias: 'c'
+  },
+  userType: {
+    userId: {
+      type: String,
+      trim: true,
+      require: true,
+    },
+    userName: {
+      type: String,
+      trim: true,
+      require: true,
+    },
+    avatar: {
+      type: String,
+      require: true
+    }
+  },
+  deviceType: [String],
+  ipType: [String],
+  articleType: Schema.Types.ObjectId
+
 }
 
 
 
 
-exports.ARTICEL_SCHEMA
-exports.articleSchema
+
+

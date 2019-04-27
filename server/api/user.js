@@ -2,7 +2,7 @@
  * @Description: 用户相关的api
  * @Author: chenchen
  * @Date: 2019-04-12 20:07:01
- * @LastEditTime: 2019-04-23 17:14:59
+ * @LastEditTime: 2019-04-23 21:31:02
  */
 const {
   Router
@@ -160,20 +160,39 @@ router.get('/checkname', async (req, res, next) => {
 })
 
 router.put('/togglelike', async (req, res, next) => {
-  let { id } = req.body;
+  let { id,authorId } = req.body;
   let user;
 
-  try {
-    user = await UserModel.findByIdAndUpdate({ _id: id }, { $set: { fans: [''] } })
+  if (!id) {
+    return res.json({
+      success:false,
+      data:null,
+      code:errorCode.UNKHOWN,
+      msg:errorCode.UNKHOWN
+    })
+  }
 
-    if (!user) {
-      return res.json({
-        success: false,
-        data: null,
-        code: errorCode.NOT_EXSIT,
-        msg: errorMsg.NOT_EXSIT
-      })
+  try {
+    if (id) {
+      user = await UserModel.findById({_id:authorId})
+
+      if (!user) {
+        return res.json({
+          success: false,
+          data: null,
+          code: errorCode.NOT_EXSIT,
+          msg: errorMsg.NOT_EXSIT
+        })
+      }
+
+    const res =  await UserModel.updateOne({
+      fans:user.fans.push()
+    })
+
     }
+    
+
+   
 
   } catch (error) {
 
