@@ -2,7 +2,7 @@
  * @Description: 文章详情
  * @Author: chenchen
  * @Date: 2019-04-23 14:49:48
- * @LastEditTime: 2019-04-29 15:43:15
+ * @LastEditTime: 2019-04-29 15:56:11
  -->
 <template>
   <v-layout column>
@@ -358,6 +358,5 @@ export default {
 .comment-box /deep/ .v-text-field__prefix {
   white-space: nowrap;
   color: #3194d0;
-  background: #000;
 }
 </style>
