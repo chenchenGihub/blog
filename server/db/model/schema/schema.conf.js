@@ -2,7 +2,7 @@
  * @Description: 原型类型定义
  * @Author: chenchen
  * @Date: 2019-04-12 20:07:01
- * @LastEditTime: 2019-04-26 11:57:52
+ * @LastEditTime: 2019-04-28 21:15:59
  */
 const {
   Schema
@@ -108,36 +108,47 @@ exports.COMMENT_SCHEMA = {
       }
     }
   ],
-  replydataType: [{
-    user: {
-      userId: {
-        type: String,
-        trim: true,
-        require: true,
-      },
-      userName: {
-        type: String,
-        trim: true,
-        require: true,
-      },
-      avatar: {
-        type: String,
-        require: true
-      }
-    },
-    createdTime: {
-      type: Date,
-      default: Date.now()
-    },
-    commentType: {
-      type: String,
-      trim: true,
-      require: true,
-      set: v => v.trim(),
-      get: v => v.trim(),
-      alias: 'c'
-    },
-  }],
+  replydataType: [
+  //   {
+  //   parentcommentid:{
+  //     type:Schema.Types.ObjectId
+  //   },
+  //   commentid:{
+  //     type:Schema.Types.ObjectId
+  //   },
+  //   user: {
+  //     userId: {
+  //       type: String,
+  //       trim: true,
+  //       require: true,
+  //     },
+  //     userName: {
+  //       type: String,
+  //       trim: true,
+  //       require: true,
+  //     },
+  //     avatar: {
+  //       type: String,
+  //       require: true
+  //     }
+  //   },
+  //   replytouserid:{
+  //     type:Schema.Types.ObjectId
+  //   },
+  //   createdTime: {
+  //     type: Date,
+  //     default: Date.now()
+  //   },
+  //   comment: {
+  //     type: String,
+  //     trim: true,
+  //     require: true,
+  //     set: v => v.trim(),
+  //     get: v => v.trim(),
+  //     alias: 'c'
+  //   },
+  // }
+],
   commentType: {
     type: String,
     trim: true,
@@ -164,8 +175,11 @@ exports.COMMENT_SCHEMA = {
   },
   deviceType: [String],
   ipType: [String],
-  articleType: Schema.Types.ObjectId
-
+  articleType: Schema.Types.ObjectId,
+  createdTime: {
+    type: Date,
+    default: Date.now()
+  },
 }
 
 

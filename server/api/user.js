@@ -2,7 +2,7 @@
  * @Description: 用户相关的api
  * @Author: chenchen
  * @Date: 2019-04-12 20:07:01
- * @LastEditTime: 2019-04-23 21:31:02
+ * @LastEditTime: 2019-04-28 01:11:41
  */
 const {
   Router
@@ -185,7 +185,7 @@ router.put('/togglelike', async (req, res, next) => {
         })
       }
 
-    const res =  await UserModel.updateOne({
+    const res =  await UserModel.updateOne({_id:user._id},{
       fans:user.fans.push()
     })
 

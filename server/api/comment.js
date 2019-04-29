@@ -2,9 +2,10 @@
  * @Description: 评论api
  * @Author: chenchen
  * @Date: 2019-04-24 22:15:40
- * @LastEditTime: 2019-04-27 12:09:59
+ * @LastEditTime: 2019-04-29 08:53:26
  */
 const { Router } = require('express');
+const mongoose = require('mongoose');
 const router = Router()
 const { auths } = require('../middleware/auth')
 const Article = require('../db/model/article');
@@ -41,7 +42,7 @@ router.post('/comment', async (req, res, next) => {
         }
 
         data = await comment.save();
-        
+
     } catch (error) {
         res.json({
             success: false,
@@ -63,7 +64,7 @@ router.post('/comment', async (req, res, next) => {
 
 router.get('/commentlist', async (req, res, next) => {
     let { articleId } = req.query;
-   
+
     let doc;
     try {
         doc = await Comment.find({ articleId: articleId });
@@ -90,6 +91,87 @@ router.get('/commentlist', async (req, res, next) => {
     res.json({
         success: true,
         data: doc,
+        code: null,
+        msg: null
+    })
+
+})
+
+router.put('/reply', async (req, res, next) => {
+    let { parentcommentid, user, replytouserid, comment } = req.body;
+
+
+    let doc, replydata,commentid,isFloorOwner=false,isAuthor=false;
+    try {
+        doc = await Comment.findById({ _id: parentcommentid });
+
+        if (!doc) {
+            return res.json({
+                success: false,
+                data: null,
+                code: errorCode.NOT_EXSIT,
+                msg: errorMsg.NOT_EXSIT
+            })
+        }
+
+        if (doc.user.userId===user.userId) {
+            isFloorOwner = true
+        }
+
+
+        const { authorId } =  await Article.findOne({articleId:doc.articleId});
+
+        if (user.articleId===authorId) {
+            
+        }
+
+        commentid = mongoose.Types.ObjectId();
+
+        replydata = {
+            parentcommentid: parentcommentid,
+            commentid: commentid,
+            user: {
+                userId:user.userId,
+                userName:user.userName,
+                avatar:user.avatar,
+            },
+            replytouserid: replytouserid,
+            comment: comment
+        }
+
+        const res = await Comment.updateOne({ _id: doc._id }, {
+            $set: {
+                replydata: doc.replydata.push(replydata)
+            }
+        })
+
+        const ress = await doc.save();
+
+        
+
+    } catch (error) {
+        console.log(error);
+
+        res.json({
+            success: false,
+            data: null,
+            code: errorCode.DATABASE_ERROR,
+            msg: errorMsg.DATABASE_ERROR
+        })
+    }
+
+
+    res.json({
+        success: true,
+        data: {
+            comment: {
+                content: "哈哈哈",
+                createTime: Date.now,
+                id: commentid,
+                isFloorOwner: isFloorOwner,
+                isAuthor: isAuthor,
+            }
+        },
         code: null,
         msg: null
     })

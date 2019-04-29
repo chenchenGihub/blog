@@ -2,7 +2,7 @@
  * @Description: 文章详情
  * @Author: chenchen
  * @Date: 2019-04-23 14:49:48
- * @LastEditTime: 2019-04-27 21:33:39
+ * @LastEditTime: 2019-04-28 21:15:05
  -->
 <template>
   <v-layout column>
@@ -121,7 +121,6 @@
             xs12
             sm12
           >
-
             <v-card-actions>
               <v-list two-line>
                 <div
@@ -143,11 +142,54 @@
                   </v-list-tile>
                   <v-list-tile>
 
-                    <div class="operate">
-                      <span>赞</span>
-                      <span>回复</span>
+                    <div class="operate-b">
+                      <div class="operate">
+                        <i class="material-icons">
+                          thumb_up
+
+                        </i>
+                        <span class="plus">+1</span>
+                        <span>赞</span>
+                      </div>
+                      <div class="operate">
+                        <i class="material-icons">
+                          mode_comment
+                        </i>
+                        <span @click="reply(index,item)">回复</span>
+                      </div>
                     </div>
                   </v-list-tile>
+                  <v-card-actions
+                    v-if="index===selectedIndex"
+                    class="comment-box"
+                  >
+                    <v-textarea
+                      solo
+                      solo-inverted
+                      auto-grow
+                      autofocus
+                      :prefix="replyForm.userName"
+                      type='text'
+                      validate-on-blur
+                      name="input-7-4"
+                      rows='3'
+                      label="留下些足迹？"
+                      :value="replyForm.comment"
+                      @change="commentchange()"
+                      @input="commentinput($event)"
+                    ></v-textarea>
+
+                  </v-card-actions>
+                  <v-card-actions v-if="index===selectedIndex">
+                    <v-btn
+                      color="error"
+                      @click="reply(null)"
+                    >取消</v-btn>
+                    <v-btn
+                      color="info"
+                      @click="Subsubmit(item)"
+                    >提交</v-btn>
+                  </v-card-actions>
                   <v-card-actions>
                     <v-divider></v-divider>
                   </v-card-actions>
@@ -172,7 +214,17 @@ export default {
         textValue: "",
         articleId: ""
       },
-      commentList: []
+      commentList: [],
+      selectedIndex: null,
+      replyForm: {
+        parentcommentid:'',
+        user:{
+          userId: "",
+          userName: "",
+          avatar: "",
+        },
+        comment: ""
+      }
     };
   },
   methods: {
@@ -180,6 +232,10 @@ export default {
       await this.$store.dispatch("user/toggelLike", {});
     },
     textchange(event) {},
+    commentchange(event) {},
+    commentinput(event) {
+      this.replyForm.comment = event.trim();
+    },
     textinput(event) {
       this.commentForm.textValue = event.trim();
     },
@@ -198,11 +254,25 @@ export default {
         articleId: this.commentForm.articleId
       });
 
-      console.log(this.$store.comment);
-
       if (this.$store.state.comment.commentListRes.success) {
         this.commentList = this.$store.state.comment.commentListRes.commentList;
       }
+    },
+    reply(index, item) {
+      this.selectedIndex = index;
+      this.replyForm.userName = item ? `@${item.user.userName}` : "";
+    },
+    async Subsubmit(item) {
+     
+      this.replyForm.replytouserid = item.user.userId
+      this.replyForm.parentcommentid = item._id
+      await this.$store.dispatch("comment/reply", {
+        ...this.replyForm
+      });
+
+      // if (this.$store.state.comment.commentListRes.success) {
+      //   this.commentList = this.$store.state.comment.commentListRes.commentList;
+      // }
     }
   },
   async asyncData({ store, query }) {
@@ -253,15 +323,40 @@ export default {
 /deep/ .v-list--two-line .v-list__tile {
   height: auto !important;
 }
-.operate{
+.operate-b {
   padding-top: 20px;
   font-size: 14px;
-    color: #969696;
-    display: inline-block;
-    cursor: pointer;
+  color: #969696;
+  display: flex;
+  cursor: pointer;
+  justify-content: center;
+  align-items: center;
+}
+.operate {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+  position: relative;
 }
 
-.operate span:hover{
-  color: #000
+.operate .plus {
+  position: absolute;
+  opacity: 0;
+  transition: all 1s;
+}
+.operate span {
+  margin-left: 5px;
+  user-select: none;
+}
+.operate .material-icons:hover {
+  color: #f85959;
+}
+.operate span:hover {
+  color: #000;
+}
+.comment-box /deep/ .v-text-field__prefix {
+  white-space: nowrap;
+  color: #3194d0;
 }
 </style>

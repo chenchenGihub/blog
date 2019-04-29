@@ -2,7 +2,7 @@
  * @Description: file content
  * @Author: chenchen
  * @Date: 2019-03-10 01:08:09
- * @LastEditTime: 2019-04-24 09:50:43
+ * @LastEditTime: 2019-04-27 22:04:16
  */
 const webpack=require('webpack'); 
 const pkg = require('./package')
@@ -46,7 +46,11 @@ module.exports = {
     // 'quill/dist/quill.snow.css',
     'quill/dist/quill.bubble.css',
     'quill/dist/quill.core.css',
-    'highlight.js/styles/xcode.css'
+    'highlight.js/styles/xcode.css',
+    'material-design-icons-iconfont/dist/material-design-icons.css',
+    '@mdi/font/css/materialdesignicons.css',
+    '@fortawesome/fontawesome-free/css/all.css',
+    'font-awesome/css/font-awesome.min.css',
   ],
 
   /*

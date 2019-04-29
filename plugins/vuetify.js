@@ -1,6 +1,13 @@
+/*
+ * @Description: file content
+ * @Author: chenchen
+ * @Date: 2019-03-10 01:08:09
+ * @LastEditTime: 2019-04-27 21:46:45
+ */
 import Vue from 'vue'
 import Vuetify from 'vuetify/lib'
 import colors from 'vuetify/es5/util/colors'
+
 
 Vue.use(Vuetify, {
   theme: {
